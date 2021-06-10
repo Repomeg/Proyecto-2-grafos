@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trabajo 2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div>
+        <h1>Trabajo Automatas</h1>
+    </div>
+    <div>
+        <form id="form1">
+            <h2>Ingrese la longitud de su alfabeto</h2>
+            <input type="text" name="alfabeto">
+            <button type="button" class="btn0">Enviar</button>
+            <br><br>
+            <h2>Automata 1</h2>
+            <h3>Tipo de automata</h3>
+            <select name="tipo" id="tipo">
+                <option value="AFD">AFD</option>
+                <option value="AFND">AFND</option>
+            </select>
+            <h3>Cantidad de conjuntos identificadores</h3>
+            <input type="text" name="num-input" id="num1">
+            <button type="button" class="btn1">Enviar</button> 
+            <h3>Indique las transciciones</h3>
+            <div class="columnas">
+                <div class="inputsQ"></div>
+                <br><br>
+                <div class="inputsAlf"></div>
+                <br><br>
+                <div class="selectRec"></div>
+                <h3 id="finales"></h3>
+                <div class="inputsRad"></div>
+            </div>
+        </form>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
