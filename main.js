@@ -66,13 +66,18 @@ const botont5Au2 = document.getElementById("boton5-au2");
 
 //Imagenes Automata 1
 const imgAuAfd = document.querySelector(".Au-AFD");
-const imgAuCom = document.querySelector(".Au-Complemento");
+const imgAuEqui = document.querySelector(".Au-Equi");
+const imgAuSimp = document.querySelector(".Au-Simp");
+const imgAuCom = document.querySelector(".Au-Comp");
 
 //Imagenes Automata 2
 const imgAuAfdAu2 = document.querySelector(".Au-AFD-au2");
+const imgAuEquiAu2 = document.querySelector(".Au-Equi-au2");
+const imgAuSimpAu2 = document.querySelector(".Au-Simp-au2");
+const imgAuComAu2 = document.querySelector(".Au-Comp-au2");
 
 // Imagen Union Automatas
-const imgAusUnion = document.querySelector("Au-Union");
+const imgAuUnion = document.querySelector(".Au-Union");
 
 //Variables Globales
 let abc = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","u","v","w","x","y","z"];
@@ -100,7 +105,7 @@ class automata{
     }
 }
 
-//Se crean 2 automatas
+//Se crean 2 automatas para cada caso
 let automata1 = new automata;
 let automataAfnd1 = new automata;
 
@@ -110,7 +115,6 @@ let automataAfnd2 = new automata;
 let automataSimplificado1 = new automata;
 let automataSimplificado2 = new automata;
 
-let automataSimplificado = new automata;
 
 //Funcion Select Formulario Au1
 const mostrarFormulario = () => {
@@ -195,6 +199,7 @@ const imprimirSelectRec = () => {
         selNewRec.setAttribute('name',`sel${k}`);
         selNewRec.setAttribute('id',`sel${k}`);
         selNewRec.setAttribute('class',`sel${k}`);
+        document.getElementById(`sel${k}`).style.marginBottom = '5px';
     }
     agregarOptions();
 }
@@ -366,6 +371,7 @@ const imprimirSelectRecAfnd = () => {
             selNewRecAfnd.setAttribute('name',`selAfnd${df}-${ad}`);
             selNewRecAfnd.setAttribute('id',`selAfnd${df}-${ad}`);
             selNewRecAfnd.setAttribute('class',`selAfnd${df}-${ad}`);
+            document.getElementById(`selAfnd${df}-${ad}`).style.marginBottom = '5px';
         } 
     }
     agregarOptionsAfnd();
@@ -498,6 +504,7 @@ const imprimirSelectRecAu2 = () => {
         selNewRecAu2.setAttribute('name',`sel${kP}-Au2`);
         selNewRecAu2.setAttribute('id',`sel${kP}-Au2`);
         selNewRecAu2.setAttribute('class',`sel${kP}-Au2`);
+        document.getElementById(`sel${kP}-Au2`).style.marginBottom = '5px'
     }
     agregarOptionsAu2();
 }
@@ -670,6 +677,7 @@ const imprimirSelectRecAfndAu2 = () => {
             selNewRecAfndAu2.setAttribute('name',`selAfnd${dfl}-${adl}-Au2`);
             selNewRecAfndAu2.setAttribute('id',`selAfnd${dfl}-${adl}-Au2`);
             selNewRecAfndAu2.setAttribute('class',`selAfnd${dfl}-${adl}-Au2`);
+            document.getElementById(`selAfnd${dfl}-${adl}-Au2`).style.marginBottom = '5px'
         } 
     }
     agregarOptionsAfndAu2();
@@ -829,6 +837,7 @@ const estadosDistinguibles = (compatibles1,Finale1,Trans1,numAlf1) => {
 }
 
 const simplificadoAFD = (compatibles1,Finale1,Qs1,Trans1,Alf1,numAlf1,Inicio,Qfinal) => {
+    let automataSimplificado = new automata;
 
     let aux_compatibles = compatibles1;
     let auxFinale = Finale1;
@@ -919,21 +928,21 @@ const simplificadoAFD = (compatibles1,Finale1,Qs1,Trans1,Alf1,numAlf1,Inicio,Qfi
 const simplificar = (comp,fin_aux,tran_aux,numAlf_aux,qq_aux,alf_aux,Inicio,Qfinal) => {
     estadosCompatibles(comp,fin_aux);
     estadosDistinguibles(comp,fin_aux,tran_aux,numAlf_aux);
-    simplificadoAFD(comp,fin_aux,qq_aux,tran_aux,alf_aux,numAlf_aux,Inicio,Qfinal);
+    return simplificadoAFD(comp,fin_aux,qq_aux,tran_aux,alf_aux,numAlf_aux,Inicio,Qfinal);
 }
 
-const complemento = () => {
+const complemento = (automata_aux) => {
     let compFinale = [];
 
-    for(let cv=0;cv<automata1.f.length;cv++){
-        if(automata1.f[cv]==true){
+    for(let cv=0;cv<automata_aux.length;cv++){
+        if(automata_aux[cv]==true){
             compFinale[cv]=false;
         }
         else{
             compFinale[cv]=true;
         }
     }
-    console.log(automata1.f);
+    console.log(compFinale);
     return compFinale;
 }
 
@@ -979,9 +988,11 @@ btn2.addEventListener('click', (evt) => {
     guardarSelec();
     guardarCheck();
     guardarRad();
-    simplificar(compatibles,automata1.f,automata1.g,numAlf,automata1.k,automata1.s,automata1.i,automata1.qf);
-    imgAuAfd.setAttribute('src',`${crearAu(automataSimplificado.k,automataSimplificado.g,automataSimplificado.s,automataSimplificado.qf,automataSimplificado.f,automataSimplificado.i)}`);
-    
+    imgAuAfd.setAttribute('src',`${crearAu(automata1.k,automata1.g,automata1.s,automata1.qf,automata1.f,automata1.i)}`);
+    imgAuEqui.setAttribute('src',`${crearAu(automata1.k,automata1.g,automata1.s,automata1.qf,automata1.f,automata1.i)}`);
+    automataSimplificado1 = simplificar(compatibles,automata1.f,automata1.g,numAlf,automata1.k,automata1.s,automata1.i,automata1.qf);
+    imgAuSimp.setAttribute('src',`${crearAu(automataSimplificado1.k,automataSimplificado1.g,automataSimplificado1.s,automataSimplificado1.qf,automataSimplificado1.f,automataSimplificado1.i)}`);
+    imgAuCom.setAttribute('src',`${crearAu(automataSimplificado1.k,automataSimplificado1.g,automataSimplificado1.s,automataSimplificado1.qf,complemento(automataSimplificado1.f),automataSimplificado1.i)}`);
 });
 
 //Afnd 1
@@ -1032,7 +1043,10 @@ btn8.addEventListener('click', (evt) => {
     guardarRadAu2();
     guardarCheckAu2();
     imgAuAfdAu2.setAttribute('src',`${crearAu(automata2.k,automata2.g,automata2.s,automata2.qf,automata2.f,automata2.i)}`);
-    union();
+    imgAuEquiAu2.setAttribute('src',`${crearAu(automata2.k,automata2.g,automata2.s,automata2.qf,automata2.f,automata2.i)}`);
+    automataSimplificado2 = simplificar(compatibles,automata2.f,automata2.g,numAlf,automata2.k,automata2.s,automata2.i,automata2.qf);
+    imgAuSimpAu2.setAttribute('src',`${crearAu(automataSimplificado2.k,automataSimplificado2.g,automataSimplificado2.s,automataSimplificado2.qf,automataSimplificado2.f,automataSimplificado2.i)}`);
+    imgAuComAu2.setAttribute('src',`${crearAu(automataSimplificado2.k,automataSimplificado2.g,automataSimplificado2.s,automataSimplificado2.qf,complemento(automataSimplificado2.f),automataSimplificado2.i)}`);
 })
 
 //Afnd 2
