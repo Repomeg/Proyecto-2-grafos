@@ -1076,3 +1076,4 @@ btn11.addEventListener('click', (evt) => {
     guardarRadAfndAu2();
     imgAuAfdAu2.setAttribute('src',`${crearAu(automataAfnd2.k,automataAfnd2.g,automataAfnd2.s,automataAfnd2.qf,automataAfnd2.f,automataAfnd2.i)}`);
 })
+console.log('hola');
