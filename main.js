@@ -84,6 +84,7 @@ let abc = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","
 let numTransAfnd = [];
 let numTransAfndAu2 = [];
 let compatibles = [];
+let Largo;
 
 //Arrays Automata
 let Qs = [];
@@ -96,7 +97,7 @@ let InicioAfnd;
 
 //Clase Automata
 class automata{
-    constructor(k,s,g,f,qf,i,afd){
+    constructor(k,s,g,f,qf,i,l){
         this.k = [];
         this.s = [];
         this.g = [];
@@ -114,6 +115,8 @@ let automataAfnd2 = new automata;
 
 let automataSimplificado1 = new automata;
 let automataSimplificado2 = new automata;
+
+let automataUnion = new automata;
 
 
 //Funcion Select Formulario Au1
@@ -640,7 +643,6 @@ const guardarInputsQAfndTransAu2 = () => {
     console.log(automataAfnd2.k);
 }
 
-
 const imprimirInputsAlfAfndTransAu2 = () => {
     const valorInputAlfAfndAu2 = txtNumInputi2[0].value;
 
@@ -763,8 +765,6 @@ const crearAu = (Qs_aux,Trans_aux,Alf_aux,Qfinale_aux,Finale_aux,Inicio_aux) => 
     let poi=`poi[shape=point]`;
     let fin;
 
-    
-
     for(let z=0;z<Finale_aux.length;z++){
         if(Finale_aux[z]==true){
             double+=`${Qfinale_aux[z]} [shape=doublecircle];`;
@@ -776,6 +776,29 @@ const crearAu = (Qs_aux,Trans_aux,Alf_aux,Qfinale_aux,Finale_aux,Inicio_aux) => 
         direccionQ+=Qs_aux[b]+'->'+Trans_aux[b]+`[label="${Alf_aux[b]}"]`+';';
     }
     fin = 'https://quickchart.io/graphviz?graph=digraph{'+poi+point+double+direccionQ+'}';
+    return fin;
+}
+
+const crearAuUnion = (Qs_aux,Trans_aux,Alf_aux,Qfinale_aux,Finale_aux) => {
+    let direUniQ = `q0->q1 [label="E"]; q0->q${Largo+1}[label="E"]`;
+    let direcQs = Qs_aux[0]+'->'+Trans_aux[0]+`[label="${Alf_aux[0]}"]`;
+    let double = '';
+    let point = `poi->q0`+' [color=dodgerblue,style=dotted] ;';
+    let poi=`poi[shape=point]`;
+    let fin;
+
+    for(let z=0;z<Finale_aux.length;z++){
+        if(Finale_aux[z]==true){
+            double+=`${Qfinale_aux[z]} [shape=doublecircle];`;
+        }
+    }
+    console.log(double);
+
+    for(let b =1; b < Qs_aux.length; b++){
+        direcQs+=Qs_aux[b]+'->'+Trans_aux[b]+`[label="${Alf_aux[b]}"]`+';';
+    }
+    fin = 'https://quickchart.io/graphviz?graph=digraph{'+poi+point+double+direUniQ+direcQs+'}';
+    Largo = 0;
     return fin;
 }
 
@@ -948,19 +971,75 @@ const complemento = (automata_aux) => {
 
 const union = () => {
     let newQ = [];
-    let largo = automata1.f.length;
+    let newTrans = [];
+    let newRec = [];
+    let newFinale = [];
+    let newQFinale = [];
+    let newInicio = 0;
 
-    for(let dv=1; dv<=largo*cantAlf; dv++){
-        newQ.push(`q${dv%cantAlf}`);
+    let fina1 = automata1.f;
+    let fina2 = automata2.f;
+
+    let reci1 = automata1.g;
+    let reci2 = automata2.g;
+
+    let tran1 = automata1.s;
+    let tran2 = automata2.s;
+
+    let largo = automata1.qf.length;
+    let largo2 = automata2.qf.length;
+
+    let Tlargo = largo+largo2;
+
+    for(let dv=0; dv<largo*numAlf; dv++){
+        newQ.push(`q${Math.trunc(dv/numAlf)+1}`);
     }
+    for(let dvp=0; dvp<largo2*numAlf; dvp++){
+        newQ.push(`q${Math.trunc(dvp/numAlf)+1+largo}`);
+    }
+
+    for(let dvm=0; dvm<largo*numAlf; dvm++){
+        newTrans.push(tran1[dvm]);
+    }
+    for(let dvi=0; dvi<largo2*numAlf; dvi++){
+        newTrans.push(tran2[dvi]);
+    }
+
+    for(let dvo=0; dvo<largo*numAlf; dvo++){
+        newRec.push(`q${Number.parseInt(reci1[dvo].charAt(1))+1}`);
+    }
+    for(let dvj=0; dvj<largo2*numAlf; dvj++){
+        newRec.push(`q${Number.parseInt(reci2[dvj].charAt(1))+(largo+1)}`);
+    }
+
+    for(let dva=0; dva<largo; dva++){
+        newFinale.push(fina1[dva]);
+    }
+    for(let dvn=0; dvn<largo2; dvn++){
+        newFinale.push(fina2[dvn]);
+    }
+
+    for(let dvg=1; dvg<=Tlargo; dvg++){
+        newQFinale.push(`q${dvg}`);
+    }
+
     console.log(newQ);
+    console.log(newTrans);
+    console.log(newRec);
+    console.log(newFinale);
+    console.log(newQFinale);
+    console.log(`Estado Inicial: q${newInicio}`);
 
-    /*for(let dvp=0; dvp<largo*cantAlf; dvp++){
-        newQ.push(`q${dvp+largo}`);
-    }
-    console.log(newQ);*/
+    automataUnion.k = newQ;
+    automataUnion.s = newTrans;
+    automataUnion.g = newRec;
+    automataUnion.f = newFinale;
+    automataUnion.qf = newQFinale;
+    automataUnion.i = newInicio;
+    Largo = largo;
+
+    console.log(automataUnion.l);
 }
-
 
 //Eventos
 btn0.addEventListener('click', (evt) => {
@@ -990,7 +1069,7 @@ btn2.addEventListener('click', (evt) => {
     guardarRad();
     imgAuAfd.setAttribute('src',`${crearAu(automata1.k,automata1.g,automata1.s,automata1.qf,automata1.f,automata1.i)}`);
     imgAuEqui.setAttribute('src',`${crearAu(automata1.k,automata1.g,automata1.s,automata1.qf,automata1.f,automata1.i)}`);
-    automataSimplificado1 = simplificar(compatibles,automata1.f,automata1.g,numAlf,automata1.k,automata1.s,automata1.i,automata1.qf);
+    //automataSimplificado1 = simplificar(compatibles,automata1.f,automata1.g,numAlf,automata1.k,automata1.s,automata1.i,automata1.qf);
     imgAuSimp.setAttribute('src',`${crearAu(automataSimplificado1.k,automataSimplificado1.g,automataSimplificado1.s,automataSimplificado1.qf,automataSimplificado1.f,automataSimplificado1.i)}`);
     imgAuCom.setAttribute('src',`${crearAu(automataSimplificado1.k,automataSimplificado1.g,automataSimplificado1.s,automataSimplificado1.qf,complemento(automataSimplificado1.f),automataSimplificado1.i)}`);
 });
@@ -1042,11 +1121,13 @@ btn8.addEventListener('click', (evt) => {
     guardarSelecAu2();
     guardarRadAu2();
     guardarCheckAu2();
+    union();
     imgAuAfdAu2.setAttribute('src',`${crearAu(automata2.k,automata2.g,automata2.s,automata2.qf,automata2.f,automata2.i)}`);
     imgAuEquiAu2.setAttribute('src',`${crearAu(automata2.k,automata2.g,automata2.s,automata2.qf,automata2.f,automata2.i)}`);
-    automataSimplificado2 = simplificar(compatibles,automata2.f,automata2.g,numAlf,automata2.k,automata2.s,automata2.i,automata2.qf);
+    //automataSimplificado2 = simplificar(compatibles,automata2.f,automata2.g,numAlf,automata2.k,automata2.s,automata2.i,automata2.qf);
     imgAuSimpAu2.setAttribute('src',`${crearAu(automataSimplificado2.k,automataSimplificado2.g,automataSimplificado2.s,automataSimplificado2.qf,automataSimplificado2.f,automataSimplificado2.i)}`);
     imgAuComAu2.setAttribute('src',`${crearAu(automataSimplificado2.k,automataSimplificado2.g,automataSimplificado2.s,automataSimplificado2.qf,complemento(automataSimplificado2.f),automataSimplificado2.i)}`);
+    imgAuUnion.setAttribute('src',`${crearAuUnion(automataUnion.k,automataUnion.g,automataUnion.s,automataUnion.qf,automataUnion.f,automataUnion.i)}`);
 })
 
 //Afnd 2
