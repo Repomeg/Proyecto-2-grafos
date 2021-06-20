@@ -6,42 +6,248 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trabajo 2</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div>
-        <h1>Trabajo Automatas</h1>
-    </div>
-    <h2>Ingrese la longitud de su alfabeto</h2>
-    <input type="number" id="alfabeto">
-    <button type="button" class="btn0">Enviar</button>
-    <br><br>
-    <div class="wrapper">
-        <form id="form1">
-           
-            <h2>Automata 1</h2>
-            <h3>Tipo de automata</h3>
-            <select name="tipo" id="tipo">
-                <option value="AFD">AFD</option>
-                <option value="AFND">AFND</option>
-            </select>
-            <h3>Cantidad de conjuntos identificadores</h3>
-            <input type="text" name="num-input" id="num1">
-            <button type="button" class="btn1">Enviar</button> 
-            <h3>Indique las transciciones</h3>
-            <div class="columnas">
-                <div class="inputsQ"></div>
-                <br><br>
-                <div class="inputsAlf"></div>
-                <br><br>
-                <div class="selectRec"></div>                
+<body class="background font">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-light border-info">
+        <div class="container d-flex justify-content-around">
+            <div>
+                <a href="https://github.com/Repomeg/Proyecto-2-grafos">
+                    <img src="img/utem.png" alt="">
+                </a>
             </div>
-               <h3 id="finales"></h3>
-               <div class="inputsCheck"></div>
-               <br>
-            <button type="button" class="btn2">Enviar Formulario</button>
-        </form>
+            <div>
+                <h1>Trabajo Automatas</h1>
+            </div>
+            <div>
+                <a href="#" class="container-fluid">
+                    <img src="img/github-logo.png" alt="">
+                </a>
+            </div>
+        </div>
+    </nav>
+    <br><br>
+    <div class="container border border-info bg-light">
+        <h2>Ingrese la longitud de su alfabeto</h2>
+        <input type="number" id="alfabeto">
+        <button type="button" class="btn0">Enviar</button>
+        <br><br>
+    </div>
+    <br><br>
+    <div class="container border border-info bg-light">
+            <div class="row align-items-start">
+                <div class="col">      
+            <div class="container">
+                <h2>Automata 1</h2>
+                <h3>Tipo de automata</h3>
+                <select name="tipo" id="tipo" onclick="mostrarFormulario()">
+                    <option value="AFD">AFD</option>
+                    <option value="AFND">AFND</option>
+                </select>
+            </div>
+
+        <div class="wrapper" id="wrapper">
+            <form id="form1">
+                <h3>Cantidad de conjuntos identificadores</h3>
+                <input type="number" name="num-input" id="num1">
+                <button type="button" class="btn1">Enviar</button> 
+                
+                <div id='indique'></div>
+                <div class="columnas">
+                    <div class="inputsQ"></div>
+                    <br><br>
+                    <div class="inputsAlf"></div>
+                    <br><br>
+                    <div class="selectRec"></div>                
+                </div>
+                <h3 id="inicial"></h3>
+                <div class="inputsRad"></div>
+                <h3 id="finales"></h3>
+                <div class="inputsCheck"></div>
+                <br>
+                <button type="button" class="btn2">Enviar Formulario</button>
+            </form>
+        </div>
+        
+        <div class="wrapper1" id="wrapper1">
+            <form id="form2">
+                <h3>Cantidad de conjuntos identificadores</h3>
+                <input type="number" name="num-inputi" id="num1i">
+                <button type="button" class="btn4">Enviar</button> 
+
+                <div id="boton5">
+                    <h3>Indique cantidad de transacciones por estado</h3>
+                    <div class="columnas">
+                    <div class="input-QAfnd"></div>
+                    <div class="input-num-QAfnd"></div>
+                    <br>
+                    </div>
+                    <button type="button" class="btn5">Enviar</button> 
+                </div>
+                
+                <h3 id="titulo-transAfnd"></h3>
+                <div class="columnas">
+                <div class="inputs-Q-Afnd"></div>
+                <br>
+                <div class="input-Alf-Afnd"></div>
+                <br>
+                <div class="select-Rec-Afnd"></div>
+                </div>
+
+                <h3 id="inicial-Afnd"></h3>
+                <div class="inputs-Rad-Afnd"></div>
+                <h3 id="finales-Afnd"></h3>
+                <div class="inputs-Check-Afnd"></div>
+                <br>
+
+                <button type="button" class="btn6">Enviar Formulario</button>
+            </form>
+        </div>
+    </div>
+
+        <div class="col">
+            <div>
+                <h2>Automata 2</h2>
+                <h3>Tipo de automata</h3>
+                <select name="tipo-au2" id="tipo-au2" onclick="mostrarFormularioAu2()">
+                    <option value="AFD">AFD</option>
+                    <option value="AFND">AFND</option>
+                </select>
+            </div>
+
+                <div class="wrapper-au2" id="wrapper-au2">
+                    <form id="form-au2">
+                        <h3>Cantidad de conjuntos identificadores</h3>
+                        <input type="number" name="num-input-au2" id="num1-au2">
+                        <button type="button" class="btn7">Enviar</button> 
+                        
+                        <div id='indique-au2'></div>
+                        <div class="columnas">
+                            <div class="inputsQ-au2"></div>
+                            <br><br>
+                            <div class="inputsAlf-au2"></div>
+                            <br><br>
+                            <div class="selectRec-au2"></div>                
+                        </div>
+                        <h3 id="inicial-au2"></h3>
+                        <div class="inputsRad-au2"></div>
+                        <h3 id="finales-au2"></h3>
+                        <div class="inputsCheck-au2"></div>
+                        <br>
+                        <button type="button" class="btn8">Enviar Formulario</button>
+                    </form>
+                </div>
+
+                <div class="wrapper1-au2" id="wrapper1-au2">
+                    <form id="form2-au2">
+                        <h3>Cantidad de conjuntos identificadores</h3>
+                        <input type="number" name="num-inputi-au2" id="num1i-au2">
+                        <button type="button" class="btn9">Enviar</button> 
+
+                        <div id="boton5-au2">
+                            <h3>Indique cantidad de transacciones por estado</h3>
+                            <div class="columnas">
+                                <div class="input-QAfnd-au2"></div>
+                                <div class="input-num-QAfnd-au2"></div>
+                                <br>
+                            </div>
+                            <button type="button" class="btn10">Enviar</button> 
+                        </div>
+                        
+                        <h3 id="titulo-transAfnd-au2"></h3>
+                        <div class="columnas">
+                            <div class="inputs-Q-Afnd-au2"></div>
+                            <br>
+                            <div class="input-Alf-Afnd-au2"></div>
+                            <br>
+                            <div class="select-Rec-Afnd-au2"></div>
+                        </div>
+                        <h3 id="inicial-Afnd-au2"></h3>
+                        <div class="inputs-Rad-Afnd-au2"></div>
+                        <h3 id="finales-Afnd-au2"></h3>
+                        <div class="inputs-Check-Afnd-au2"></div>
+                        <br>
+
+                        <button type="button" class="btn11">Enviar Formulario</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container border border-info bg-light">
+        <div class="container">
+            <div class="row align-items-start">
+                <div class="col">
+                    <h2>Imagen de su automata 1</h2>
+                    <img class="Au-AFD">
+                </div>
+    
+                <div class="col">
+                    <h2>Imagen de su automata 2</h2>
+                    <img class="Au-AFD-au2">
+                </div>
+            </div>
+        </div>
+    
+        <div class="container">
+            <div class="row align-items-start">
+                <div class="col">
+                    <h2>Equivalencia AFD de su automata 1</h2>
+                    <img class="Au-Equi">
+                </div>
+    
+                <div class="col">
+                    <h2>Equivalencia AFD de su automata 2</h2>
+                    <img class="Au-Equi-au2">
+                </div>
+            </div>
+        </div>
+    
+        <div class="container">
+            <div class="row align-items-start">
+                <div class="col">
+                    <h2>Simplificacion de su automata 1</h2>
+                    <img class="Au-Simp">
+                </div>
+    
+                <div class="col">
+                    <h2>Simplificacion de su automata 2</h2>
+                    <img class="Au-Simp-au2">
+                </div>
+            </div>
+        </div>
+    
+        <div class="container">
+            <div class="row align-items-start">
+                <div class="col">
+                    <h2>Complemento de su automata 1</h2>
+                    <img class="Au-Comp">
+                </div>
+    
+                <div class="col">
+                    <h2>Complemento de su automata 2</h2>
+                    <img class="Au-Comp-au2">
+                </div>
+            </div>
+        </div>
+    
+        <div class="d-flex justify-content-center">
+            <h2>Union de sus automatas</h2>
+            <img class="Au-Union">
+        </div>
+    
+        <div class="d-flex justify-content-center">
+            <h2>Concatenacion de sus automatas</h2>
+            <img class="Au-Concatenacion">
+        </div>
     </div>
 
     <script src="main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
