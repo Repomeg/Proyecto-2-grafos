@@ -66,18 +66,26 @@ const botont5Au2 = document.getElementById("boton5-au2");
 
 //Imagenes Automata 1
 const imgAuAfd = document.querySelector(".Au-AFD");
-const imgAuCom = document.querySelector(".Au-Complemento");
+const imgAuEqui = document.querySelector(".Au-Equi");
+const imgAuSimp = document.querySelector(".Au-Simp");
+const imgAuCom = document.querySelector(".Au-Comp");
 
 //Imagenes Automata 2
 const imgAuAfdAu2 = document.querySelector(".Au-AFD-au2");
+const imgAuEquiAu2 = document.querySelector(".Au-Equi-au2");
+const imgAuSimpAu2 = document.querySelector(".Au-Simp-au2");
+const imgAuComAu2 = document.querySelector(".Au-Comp-au2");
 
 // Imagen Union Automatas
-const imgAusUnion = document.querySelector("Au-Union");
+const imgAuUnion = document.querySelector(".Au-Union");
+const imgAuConca = document.querySelector(".Au-Concatenacion");
 
 //Variables Globales
 let abc = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","u","v","w","x","y","z"];
 let numTransAfnd = [];
 let numTransAfndAu2 = [];
+let compatibles = [];
+let Largo;
 
 //Arrays Automata
 let Qs = [];
@@ -90,7 +98,7 @@ let InicioAfnd;
 
 //Clase Automata
 class automata{
-    constructor(k,s,g,f,qf,i,afd){
+    constructor(k,s,g,f,qf,i,l){
         this.k = [];
         this.s = [];
         this.g = [];
@@ -99,12 +107,25 @@ class automata{
     }
 }
 
-//Se crean 2 automatas
+//Se crean 2 automatas para cada caso
 let automata1 = new automata;
 let automataAfnd1 = new automata;
 
 let automata2 = new automata;
 let automataAfnd2 = new automata;
+
+//Respaldo de automatas iniciales
+let respaldo_au1 = new automata;
+let respaldo_au2 = new automata;
+
+//Automatas Simplificados
+let automataSimplificado1 = new automata;
+let automataSimplificado2 = new automata;
+
+//Automatas mezcla de ambos
+let automataUnion = new automata;
+let automataConca = new automata;
+
 
 //Funcion Select Formulario Au1
 const mostrarFormulario = () => {
@@ -189,6 +210,7 @@ const imprimirSelectRec = () => {
         selNewRec.setAttribute('name',`sel${k}`);
         selNewRec.setAttribute('id',`sel${k}`);
         selNewRec.setAttribute('class',`sel${k}`);
+        document.getElementById(`sel${k}`).style.marginBottom = '5px';
     }
     agregarOptions();
 }
@@ -360,6 +382,7 @@ const imprimirSelectRecAfnd = () => {
             selNewRecAfnd.setAttribute('name',`selAfnd${df}-${ad}`);
             selNewRecAfnd.setAttribute('id',`selAfnd${df}-${ad}`);
             selNewRecAfnd.setAttribute('class',`selAfnd${df}-${ad}`);
+            document.getElementById(`selAfnd${df}-${ad}`).style.marginBottom = '5px';
         } 
     }
     agregarOptionsAfnd();
@@ -492,6 +515,7 @@ const imprimirSelectRecAu2 = () => {
         selNewRecAu2.setAttribute('name',`sel${kP}-Au2`);
         selNewRecAu2.setAttribute('id',`sel${kP}-Au2`);
         selNewRecAu2.setAttribute('class',`sel${kP}-Au2`);
+        document.getElementById(`sel${kP}-Au2`).style.marginBottom = '5px'
     }
     agregarOptionsAu2();
 }
@@ -627,7 +651,6 @@ const guardarInputsQAfndTransAu2 = () => {
     console.log(automataAfnd2.k);
 }
 
-
 const imprimirInputsAlfAfndTransAu2 = () => {
     const valorInputAlfAfndAu2 = txtNumInputi2[0].value;
 
@@ -664,6 +687,7 @@ const imprimirSelectRecAfndAu2 = () => {
             selNewRecAfndAu2.setAttribute('name',`selAfnd${dfl}-${adl}-Au2`);
             selNewRecAfndAu2.setAttribute('id',`selAfnd${dfl}-${adl}-Au2`);
             selNewRecAfndAu2.setAttribute('class',`selAfnd${dfl}-${adl}-Au2`);
+            document.getElementById(`selAfnd${dfl}-${adl}-Au2`).style.marginBottom = '5px'
         } 
     }
     agregarOptionsAfndAu2();
@@ -745,7 +769,7 @@ const guardarRadAfndAu2 = () => {
 const crearAu = (Qs_aux,Trans_aux,Alf_aux,Qfinale_aux,Finale_aux,Inicio_aux) => {
     let direccionQ = Qs_aux[0]+'->'+Trans_aux[0]+`[label="${Alf_aux[0]}"]`+';';
     let double='';
-    let point=`poi->${Qfinale_aux[Inicio_aux]}`+' [color=dodgerblue,style=dotted] ;';
+    let point=`poi->q${Inicio_aux}`+' [color=dodgerblue,style=dotted] ;';
     let poi=`poi[shape=point]`;
     let fin;
 
@@ -763,30 +787,475 @@ const crearAu = (Qs_aux,Trans_aux,Alf_aux,Qfinale_aux,Finale_aux,Inicio_aux) => 
     return fin;
 }
 
-const complemento = () => {
+/*const crearAuUnion = (Qs_aux,Trans_aux,Alf_aux,Qfinale_aux,Finale_aux) => {
+    let direUniQ = `q0->q1 [label="E"]; q0->q${Largo+1}[label="E"]`;
+    let direcQs = Qs_aux[0]+'->'+Trans_aux[0]+`[label="${Alf_aux[0]}"]`;
+    let double = '';
+    let point = `poi->q0`+' [color=dodgerblue,style=dotted] ;';
+    let poi=`poi[shape=point]`;
+    let fin;
+
+    for(let z=0;z<Finale_aux.length;z++){
+        if(Finale_aux[z]==true){
+            double+=`${Qfinale_aux[z]} [shape=doublecircle];`;
+        }
+    }
+    console.log(double);
+
+    for(let b =1; b < Qs_aux.length; b++){
+        direcQs+=Qs_aux[b]+'->'+Trans_aux[b]+`[label="${Alf_aux[b]}"]`+';';
+    }
+    fin = 'https://quickchart.io/graphviz?graph=digraph{'+poi+point+double+direUniQ+direcQs+'}';
+    Largo = 0;
+    return fin;
+}
+
+const estadosCompatibles = (compatibles1,Finale1) => {
+    let aux = [];
+    //Rellena con 1 los incompatibles
+    for(let i = 0; i<Finale1.length; i++){
+        for(let j = 0; j<Finale1.length; j++){
+                if(i > j){
+                    if(Finale1[i] == true && Finale1[j] == false || Finale1[i] == false && Finale1[j] == true ){
+                        aux.push(1);
+                    }
+                    else
+                        aux.push(0);
+                }
+            } 
+            compatibles1[i] = aux;
+            aux = [];
+        }   
+    console.log(compatibles1);
+}*/
+
+const estadosCompatibles = (compi,ff) => {
+    let aux = [];
+    let Finale1 = ff;
+    let compatibles1 = compi; 
+
+    //Rellena con 1 los incompatibles
+    for(let i = 0; i<Finale1.length; i++){
+        for(let j = 0; j<Finale1.length; j++){
+                if(i > j){
+                    if(Finale1[i] == true && Finale1[j] == false || Finale1[i] == false && Finale1[j] == true ){
+                        aux.push(1);
+                    }
+                    else
+                        aux.push(0);
+                }
+            } 
+            compatibles1[i] = aux;
+            aux = [];
+        }   
+    console.log(compatibles1);
+}
+
+const estadosDistinguibles = (com,Fi,Tra,niu) => {
+    let compatibles1 = com;
+    let Finale1 = Fi;
+    let Trans1 = Tra;
+    let numAlf1 = niu;
+
+    let a=0;
+         for(let i=0; i<Finale1.length;i++){  // for para viajar a traves de la matriz "compatibles"
+             for(let j=0; j<Finale1.length;j++){
+                    if(compatibles1[i][j]==0){    // se pregunta cual de los puntos no ha sido evaludado
+                        for(let p=0;p<Trans1.length;p++){   // se recorre con un "for" llamando "p" al vector que muestra el indice de "k y g o Qs y Trans"
+                            if(p==(i*numAlf1)){  // se pregunta si "p" es igual al indice "i" multiplicado por la cantidad de alfabeto que se esta usando en el automata"
+                                 let x=[];
+                                 let y=[];
+                                 for(a=0;a<numAlf1;a++){
+                                     if(numAlf1<10){
+                                        x[a]=Number.parseInt(Trans1[(i*numAlf1)+a].charAt(1));
+                                     }
+                                    else{
+                                        x[a]=Number.parseInt(Trans1[(i*numAlf1)+a].charAt(1))*10 + Number.parseInt(Trans1[(i*numAlf1)+a].charAt(2));
+                                    }
+                                 }
+                                 for(a=0;a<numAlf1;a++){
+                                    if(numAlf1<10){
+                                        y[a]=Number.parseInt(Trans1[(j*numAlf1)+a].charAt(1));
+                                     }
+                                    else{
+                                        y[a]=Number.parseInt(Trans1[(j*numAlf1)+a].charAt(1))*10 + Number.parseInt(Trans1[(i*numAlf1)+a].charAt(2));
+                                    }
+                                 }
+                                 for(a=0;a<Trans1.length;a++){
+                                     if(Finale1[x[a]] != Finale1[y[a]]){ 
+                                         compatibles1[i][j]=1;
+                                     }
+                                 }
+                             }                         
+                        }
+                     }   
+                 }
+         }
+     console.log(compatibles1);  
+}
+
+const estadosColapsados = (compp,qqs,Finn,Trass,nuuum) =>{
+    let compatibles1 = compp;
+    let Qs1 = qqs;
+    let Finale1 = Finn;
+    let Trans1 = Trass;
+    let numAlf1 = nuuum;
+    
+    let colapso = [];
+    for(let i=0;i<Qs1.length;i++){
+        if(Finale1[Number.parseInt(Trans1[i].charAt(1))]==true){
+            colapso[i]=0;
+        }
+        else{
+            colapso[i]=1;
+        }
+    }
+    let colapso2 = [];
+    let cont=0;
+    let conta=0;
+    console.log(Finale1.length);
+    for(let i=0;i<Finale1.length;i++){
+        for(let j=0;j<Finale1.length;j++){
+            if(i<j){
+                for(let a=0;a<numAlf1;a++){
+                    if(colapso2[i]==null){
+                        if(colapso[(i*numAlf1)+a]==colapso[(j*numAlf1)+a]){
+                            if(conta==numAlf1-1){      
+                                colapso2[i]=cont;
+                                colapso2[j]=cont;
+                                cont++;
+                                conta=0;
+                            }
+                            conta++;
+                        }
+                    }                 
+                } 
+                conta=0;
+            }
+        }
+        if(colapso2[i]==null){
+            colapso2[i]=cont;
+            cont++;
+        }
+    }
+
+    for(let i=0;i<Finale1.length;i++){
+        for(let j=0;j<Finale1.length;j++){
+            if(compatibles1[i][j]==0){
+                for(let a=0;a<numAlf1;a++){
+                    if(colapso2[Number.parseInt(Trans1[(i*numAlf1)+a].charAt(1))] != colapso2[Number.parseInt(Trans1[(j*numAlf1)+a].charAt(1))]){
+                        compatibles1[i][j]=1;
+                    }
+                }
+            }
+        }
+    }
+
+    console.log(compatibles1);
+    console.log(colapso);
+    console.log(colapso2);
+}
+
+const simplificadoAFD = (compatibles1,Finale1,Qs1,Trans1,Alf1,numAlf1,Inicio,Qfinal) => {
+    let automataSimpi = new automata;
+    let aux_compatibles = compatibles1;
+    let auxFinale = Finale1;
+    let auxQs = Qs1;
+    let auxTrans = Trans1;
+    let auxAlf = Alf1;
+    let auxQFinale = Qfinal;
+
+    for(let i=0;i<auxFinale.length;i++){
+        for(let j=0;j<auxFinale.length;j++){
+            if(aux_compatibles[i][j]==0){
+                if(i==Inicio){
+                    for(let x=0;x<auxQs.length;x++){
+                        if(numAlf1<10){
+                            if(Number.parseInt(auxTrans[x].charAt(1))==j){
+                                for(let a=0;a<numAlf1;a++){
+                                    auxTrans[x]=auxQs[(i*numAlf1)+a];
+                                    auxQs[(j*numAlf1)+a]=null;
+                                    auxFinale[j]=null;
+                                    auxQFinale[j]=null;
+                                }  
+                            }
+                        }
+                        else{
+                            if(Number.parseInt(auxTrans[x].charAt(1))*10+Number.parseInt(auxTrans[x].charAt(2))==j){
+                                for(let a=0;a<numAlf1;a++){
+                                    auxTrans[x]=auxQs[(i*numAlf1)+a];
+                                    auxQs[(j*numAlf1)+a]=null;
+                                    auxFinale[j]=null;
+                                    auxQFinale[j]=null;
+                                }  
+                            }
+                        }   
+                    }
+                }   
+                else{
+                    for(let x=0;x<auxQs.length;x++){
+                        if(numAlf1<10){
+                            if(Number.parseInt(auxTrans[x].charAt(1))==i){
+                                for(let a=0;a<numAlf1;a++){
+                                    auxTrans[x]=auxQs[(j*numAlf1)+a];
+                                    auxQs[(i*numAlf1)+a]=null;
+                                    auxFinale[i]=null;
+                                    auxQFinale[i]=null;                           
+                                }  
+                            }
+                        }
+                        else{
+                            if(Number.parseInt(auxTrans[x].charAt(1)*10+Number.parseInt(auxTrans[x].charAt(2)))==i){
+                                for(let a=0;a<numAlf1;a++){
+                                    auxTrans[x]=auxQs[(j*numAlf1)+a];
+                                    auxQs[(i*numAlf1)+a]=null;
+                                    auxFinale[i]=null; 
+                                    auxQFinale[i]=null;                               
+                                }  
+                            }
+                        }
+                    }
+                } 
+            }
+        }
+    }
+
+    let cont=0;
+
+    for(let i=0;i<Qs1.length;i++){
+        if(auxQs[i]!=null){
+            automataSimpi.k[cont]=auxQs[i];
+            automataSimpi.s[cont]=auxAlf[i];
+            automataSimpi.g[cont]=auxTrans[i];
+            cont++;
+        }
+    }
+    console.log(auxFinale.length);
+    cont=0;
+    for(let i=0;i<Finale1.length;i++){
+        if(auxFinale[i]!=null){
+            automataSimpi.f[cont]=auxFinale[i];
+            automataSimpi.qf[cont]=auxQFinale[i];
+            cont++;
+        }
+    }
+    automataSimpi.i=Inicio;
+    console.log(automataSimpi);
+    return(automataSimpi);
+}
+
+const simplificar = (comp,fin_aux,tran_aux,numAlf_aux,qq_aux,alf_aux,Inicio,Qfinal) => {
+    estadosCompatibles(comp,fin_aux);
+    estadosDistinguibles(comp,fin_aux,tran_aux,numAlf_aux);
+    estadosColapsados(comp,qq_aux,fin_aux,tran_aux,numAlf_aux);
+    return simplificadoAFD(comp,fin_aux,qq_aux,tran_aux,alf_aux,numAlf_aux,Inicio,Qfinal);
+}
+
+const complemento = (automata_aux) => {
     let compFinale = [];
 
-    for(let cv=0;cv<automata1.f.length;cv++){
-        if(automata1.f[cv]==true){
+    for(let cv=0;cv<automata_aux.length;cv++){
+        if(automata_aux[cv]==true){
             compFinale[cv]=false;
         }
         else{
             compFinale[cv]=true;
         }
     }
-    console.log(automata1.f);
+    console.log(compFinale);
     return compFinale;
 }
 
-const union = () => {
+const nuevoAutomata = (nue1,nue2) => {
     
 }
 
+const union = (auxU1,auxU2) => {
+    let newQ = [];
+    let newTrans = [];
+    let newRec = [];
+    let newFinale = [];
+    let newQFinale = [];
+    let newInicio = 0;
+
+    let largo = auxU1.qf.length;
+    let largo2 = auxU2.qf.length;
+
+    let nivel_final = 0;
+
+    for(let klh =0; klh<auxU1.k.length; klh++){
+        newQ.push(`q${Number.parseInt(auxU1.k[klh].charAt(1))+1}`);
+        if(klh==auxU1.k.length-1){
+            nivel_final = Number.parseInt(auxU1.k[klh].charAt(1))+1;
+            console.log(nivel_final);
+        }
+    }
+    for(let klp =0; klp<auxU2.k.length; klp++){
+        newQ.push(`q${Number.parseInt(auxU2.k[klp].charAt(1))+(nivel_final+1)}`);
+    }
+
+    for(let dvm=0; dvm<auxU1.s.length; dvm++){
+        newTrans.push(auxU1.s[dvm]);
+    }
+    for(let dvi=0; dvi<auxU2.s.length; dvi++){
+        newTrans.push(auxU2.s[dvi]);
+    }
+
+    for(let dvo=0; dvo<auxU1.g.length; dvo++){
+        newRec.push(`q${Number.parseInt(auxU1.g[dvo].charAt(1))+1}`);
+    }
+    for(let dvj=0; dvj<auxU2.g.length; dvj++){
+        newRec.push(`q${Number.parseInt(auxU2.g[dvj].charAt(1))+(nivel_final+1)}`);
+    }
+
+    for(let dva=0; dva<largo; dva++){
+        newFinale.push(auxU1.f[dva]);
+    }
+    for(let dvn=0; dvn<largo2; dvn++){
+        newFinale.push(auxU2.f[dvn]);
+    }
+
+    for(let dvg=0; dvg<newQ.length; dvg=dvg+2){
+        newQFinale.push(newQ[dvg]);
+    }
+
+    let inicialE1 = Number.parseInt(auxU1.i)+1;
+    let inicialE2 = Number.parseInt(auxU2.i)+nivel_final+1;
+
+    newQ.push('q0');
+    newQ.push('q0');
+
+    newTrans.push('E');
+    newTrans.push('E');
+
+    newRec.push(`q${inicialE1}`);
+    newRec.push(`q${inicialE2}`);
+
+    newQFinale.push('q0');
+    newFinale.push(false);
+
+    console.log(newQ);
+    console.log(newTrans);
+    console.log(newRec);
+    console.log(newFinale);
+    console.log(newQFinale);
+    console.log(`Estado Inicial: q${newInicio}`);
+
+    automataUnion.k = newQ;
+    automataUnion.s = newTrans;
+    automataUnion.g = newRec;
+    automataUnion.f = newFinale;
+    automataUnion.qf = newQFinale;
+    automataUnion.i = newInicio;
+    Largo = largo;
+}
+
+const concatenacion = (aux1,aux2) => {
+    let newiQ = [];
+    let newiTrans = [];
+    let newiRec = [];
+    let newiFinale = [];
+    let newiQFinale = [];
+    let newiInicio = aux1.i;
+
+    let largoi = aux1.qf.length;
+    let largoi2 = aux2.qf.length;
+
+    let nivel_final = 0;
+
+    for(let klh =0; klh<aux1.k.length; klh++){
+        newiQ.push(`q${Number.parseInt(aux1.k[klh].charAt(1))}`);
+        if(klh==aux1.k.length-1){
+            nivel_final = Number.parseInt(aux1.k[klh].charAt(1));
+            console.log(nivel_final);
+        }
+    }
+    for(let klp =0; klp<aux2.k.length; klp++){
+        newiQ.push(`q${Number.parseInt(aux2.k[klp].charAt(1))+(nivel_final+1)}`);
+    }
+
+    for(let dvm=0; dvm<aux1.s.length; dvm++){
+        newiTrans.push(aux1.s[dvm]);
+    }
+    for(let dvi=0; dvi<aux2.s.length; dvi++){
+        newiTrans.push(aux2.s[dvi]);
+    }
+
+    for(let dvo=0; dvo<aux1.g.length; dvo++){
+        newiRec.push(`q${Number.parseInt(aux1.g[dvo].charAt(1))}`);
+    }
+    for(let dvj=0; dvj<aux2.g.length; dvj++){
+        newiRec.push(`q${Number.parseInt(aux2.g[dvj].charAt(1))+(nivel_final+1)}`);
+    }
+
+    for(let dva=0; dva<largoi; dva++){
+        newiFinale.push(aux1.f[dva]);
+    }
+    for(let dvn=0; dvn<largoi2; dvn++){
+        newiFinale.push(aux2.f[dvn]);
+    }
+
+    for(let dvg=0; dvg<newiQ.length; dvg=dvg+2){
+        newiQFinale.push(newiQ[dvg]);
+    }
+
+    console.log(newiQ);
+    console.log(newiTrans);
+    console.log(newiRec);
+    console.log(newiFinale);
+    console.log(newiQFinale);
+    console.log(`Estado Inicial: q${newiInicio}`);
+
+    let inicial2 = Number.parseInt(aux2.i)+largoi+1;
+
+    for(let afg=0;afg<largoi;afg++){
+        if(aux1.f[afg]==true){
+            newiQ.push(newiQFinale[afg]);
+            newiTrans.push('E');
+            newiRec.push(`q${inicial2}`);
+        }
+    }
+
+    for(let hjk=0;hjk<largoi;hjk++){
+        if(newiFinale[hjk]==true){
+            newiFinale[hjk]=false;
+        }
+    }
+
+    console.log('------------------------------');
+    console.log(newiQ);
+    console.log(newiTrans);
+    console.log(newiRec);
+    console.log(newiFinale);
+    console.log(newiQFinale);
+    console.log(`Estado Inicial: q${newiInicio}`);
+
+    automataConca.k = newiQ;
+    automataConca.s = newiTrans;
+    automataConca.g = newiRec;
+    automataConca.f = newiFinale;
+    automataConca.qf = newiQFinale;
+    automataConca.i = newiInicio;
+    Largo = largoi;
+}
+
+//Inicialización de Plogs
+var storage = new plog.storages.LocalStorage({maxSize: 2000})
+
+plog.useStorage(storage);
+
+function verplogs(){
+    console.log(storage.getEvents());
+}
+function limpiar(){
+    storage.clear();
+  }
 
 //Eventos
 btn0.addEventListener('click', (evt) => {
     numAlf = document.getElementById("alfabeto").value;
     console.log(numAlf);
+    //SACAR COMENTARIO plog.info('Alfabeto creado con un tamaño: '+ numAlf);
     
 });
 
@@ -800,7 +1269,8 @@ btn1.addEventListener('click', (evt) => {
     agregarRad();
     document.getElementById("finales").innerHTML = 'Seleccione sus estados finales';
     agregarCheck();
-
+    //botón enviar afd
+     //SACAR COMENTARIO plog.info('Cantidad de conjuntos identificadores para automata 1(AFD): '+ txtNumInput[0].value);
 });
 
 btn2.addEventListener('click', (evt) => {
@@ -809,8 +1279,13 @@ btn2.addEventListener('click', (evt) => {
     guardarSelec();
     guardarCheck();
     guardarRad();
+    //SACAR COMENTARIO plog.info('Se creo automata1 (AFD) con los valores: ');
+    //SACAR COMENTARIO plog.info(automata1);
     imgAuAfd.setAttribute('src',`${crearAu(automata1.k,automata1.g,automata1.s,automata1.qf,automata1.f,automata1.i)}`);
-    //simplificar();
+    imgAuEqui.setAttribute('src',`${crearAu(automata1.k,automata1.g,automata1.s,automata1.qf,automata1.f,automata1.i)}`);
+    automataSimplificado1 = simplificar(compatibles,automata1.f,automata1.g,numAlf,automata1.k,automata1.s,automata1.i,automata1.qf);
+    imgAuSimp.setAttribute('src',`${crearAu(automataSimplificado1.k,automataSimplificado1.g,automataSimplificado1.s,automataSimplificado1.qf,automataSimplificado1.f,automataSimplificado1.i)}`);
+    imgAuCom.setAttribute('src',`${crearAu(automataSimplificado1.k,automataSimplificado1.g,automataSimplificado1.s,automataSimplificado1.qf,complemento(automataSimplificado1.f),automataSimplificado1.i)}`);
 });
 
 //Afnd 1
@@ -818,12 +1293,16 @@ btn4.addEventListener('click', (evt) => {
     imprimirInputsQAfnd();
     imprimirInputNumQAfnd();
     botont5.style.display = 'block'
+    //botón enviar afnd   
+    //SACAR COMENTARIO plog.info('Cantidad de conjuntos identificadores para automata 1(AFND): '+ txtNumInputi[0].value);
     
 })
 
 btn5.addEventListener('click', (evt) => {
+    //SACAR COMENTARIO plog.info('Cantidad de transiciones por estado para el automata 1(AFND): ');
     document.getElementById("titulo-transAfnd").innerHTML = 'Indique las Transacciones'
     guardarInputNumQAfnd();
+    //SACAR COMENTARIO plog.info(numTransAfnd);
     imprimirInputsQAfndTrans();
     imprimirInputsAlfAfndTrans();
     imprimirSelectRecAfnd();
@@ -839,6 +1318,8 @@ btn6.addEventListener('click', (evt) => {
     guardarSelectRecAfnd();
     guardarCheckAfnd();
     guardarRadAfnd();
+    //SACAR COMENTARIO plog.info('Se creo automata1 (AFND) con los valores: ');
+    //SACAR COMENTARIO plog.info(automataAfnd1);
     imgAuAfd.setAttribute('src',`${crearAu(automataAfnd1.k,automataAfnd1.g,automataAfnd1.s,automataAfnd1.qf,automataAfnd1.f,automataAfnd1.i)}`);
 })
 
@@ -852,6 +1333,7 @@ btn7.addEventListener('click', (evt) => {
     agregarRadAu2();
     document.getElementById("finales-au2").innerHTML = 'Seleccione sus estados finales';
     agregarCheckAu2();
+     //SACAR COMENTARIO plog.info('Cantidad de conjuntos identificadores para automata 2(AFD): '+ txtNumInput2[0].value);
 })
 
 btn8.addEventListener('click', (evt) => {
@@ -860,8 +1342,17 @@ btn8.addEventListener('click', (evt) => {
     guardarSelecAu2();
     guardarRadAu2();
     guardarCheckAu2();
+    //SACAR COMENTARIO plog.info('Se creo automata2 (AFD) con los valores: ');
+    //SACAR COMENTARIO plog.info(automata2);
     imgAuAfdAu2.setAttribute('src',`${crearAu(automata2.k,automata2.g,automata2.s,automata2.qf,automata2.f,automata2.i)}`);
-    union();
+    imgAuEquiAu2.setAttribute('src',`${crearAu(automata2.k,automata2.g,automata2.s,automata2.qf,automata2.f,automata2.i)}`);
+    automataSimplificado2 = simplificar(compatibles,automata2.f,automata2.g,numAlf,automata2.k,automata2.s,automata2.i,automata2.qf);
+    union(automataSimplificado1,automataSimplificado2);
+    concatenacion(automataSimplificado1,automataSimplificado2);
+    imgAuSimpAu2.setAttribute('src',`${crearAu(automataSimplificado2.k,automataSimplificado2.g,automataSimplificado2.s,automataSimplificado2.qf,automataSimplificado2.f,automataSimplificado2.i)}`);
+    imgAuComAu2.setAttribute('src',`${crearAu(automataSimplificado2.k,automataSimplificado2.g,automataSimplificado2.s,automataSimplificado2.qf,complemento(automataSimplificado2.f),automataSimplificado2.i)}`);
+    imgAuUnion.setAttribute('src',`${crearAu(automataUnion.k,automataUnion.g,automataUnion.s,automataUnion.qf,automataUnion.f,automataUnion.i)}`);
+    imgAuConca.setAttribute('src',`${crearAu(automataConca.k,automataConca.g,automataConca.s,automataConca.qf,automataConca.f,automataConca.i)}`)
 })
 
 //Afnd 2
@@ -869,12 +1360,15 @@ btn9.addEventListener('click', (evt) => {
     imprimirInputsQAfndAu2();
     imprimirInputNumQAfndAu2();
     botont5Au2.style.display = 'block'
+     //SACAR COMENTARIO plog.info('Cantidad de conjuntos identificadores para automata 2(AFND): '+ txtNumInputi2[0].value);
 })
 
 btn10.addEventListener('click', (evt) => {
+    //SACAR COMENTARIO plog.info('Cantidad de transiciones por estado para el automata 2(AFND): ');
     document.getElementById("titulo-transAfnd-au2").innerHTML = 'Indique las Transacciones'
     guardarInputNumQAfndAu2();
-    imprimirInputsQAfndTransAu2();
+    //SACAR COMENTARIO plog.info(numTransAfndAu2)
+    imprimirInputsQAfndTransAu2(); 
     imprimirInputsAlfAfndTransAu2();
     imprimirSelectRecAfndAu2();
     document.getElementById("inicial-Afnd-au2").innerHTML = 'Seleccione su estado inicial';
@@ -889,5 +1383,8 @@ btn11.addEventListener('click', (evt) => {
     guardarSelectRecAfndAu2();
     guardarCheckAfndAu2();
     guardarRadAfndAu2();
-    imgAuAfdAu2.setAttribute('src',`${crearAu(automata2.k,automata2.g,automata1.s,automata2.qf,automata2.f,automata2.i)}`);
+    //SACAR COMENTARIO plog.info('Se creo automata1 (AFND) con los valores: ');
+    //SACAR COMENTARIO plog.info(automataAfnd2);
+    imgAuAfdAu2.setAttribute('src',`${crearAu(automataAfnd2.k,automataAfnd2.g,automataAfnd2.s,automataAfnd2.qf,automataAfnd2.f,automataAfnd2.i)}`);
 })
+
