@@ -13,13 +13,7 @@
       display: none;
 }
 
-/*.wrapper-au2{
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-gap: 300px;
-      grid-auto-rows: minmax(100px, auto);
-}
- */ 
+
 .columnas-au2{
         display: grid;
         grid-template-columns: repeat(5, 1fr);

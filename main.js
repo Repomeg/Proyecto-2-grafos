@@ -78,12 +78,14 @@ const imgAuComAu2 = document.querySelector(".Au-Comp-au2");
 
 // Imagen Union Automatas
 const imgAuUnion = document.querySelector(".Au-Union");
+const imgAuConca = document.querySelector(".Au-Concatenacion");
 
 //Variables Globales
 let abc = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","u","v","w","x","y","z"];
 let numTransAfnd = [];
 let numTransAfndAu2 = [];
 let compatibles = [];
+let Largo;
 
 //Arrays Automata
 let Qs = [];
@@ -96,7 +98,7 @@ let InicioAfnd;
 
 //Clase Automata
 class automata{
-    constructor(k,s,g,f,qf,i,afd){
+    constructor(k,s,g,f,qf,i,l){
         this.k = [];
         this.s = [];
         this.g = [];
@@ -112,8 +114,17 @@ let automataAfnd1 = new automata;
 let automata2 = new automata;
 let automataAfnd2 = new automata;
 
+//Respaldo de automatas iniciales
+let respaldo_au1 = new automata;
+let respaldo_au2 = new automata;
+
+//Automatas Simplificados
 let automataSimplificado1 = new automata;
 let automataSimplificado2 = new automata;
+
+//Automatas mezcla de ambos
+let automataUnion = new automata;
+let automataConca = new automata;
 
 
 //Funcion Select Formulario Au1
@@ -640,7 +651,6 @@ const guardarInputsQAfndTransAu2 = () => {
     console.log(automataAfnd2.k);
 }
 
-
 const imprimirInputsAlfAfndTransAu2 = () => {
     const valorInputAlfAfndAu2 = txtNumInputi2[0].value;
 
@@ -763,8 +773,6 @@ const crearAu = (Qs_aux,Trans_aux,Alf_aux,Qfinale_aux,Finale_aux,Inicio_aux) => 
     let poi=`poi[shape=point]`;
     let fin;
 
-    
-
     for(let z=0;z<Finale_aux.length;z++){
         if(Finale_aux[z]==true){
             double+=`${Qfinale_aux[z]} [shape=doublecircle];`;
@@ -776,6 +784,29 @@ const crearAu = (Qs_aux,Trans_aux,Alf_aux,Qfinale_aux,Finale_aux,Inicio_aux) => 
         direccionQ+=Qs_aux[b]+'->'+Trans_aux[b]+`[label="${Alf_aux[b]}"]`+';';
     }
     fin = 'https://quickchart.io/graphviz?graph=digraph{'+poi+point+double+direccionQ+'}';
+    return fin;
+}
+
+/*const crearAuUnion = (Qs_aux,Trans_aux,Alf_aux,Qfinale_aux,Finale_aux) => {
+    let direUniQ = `q0->q1 [label="E"]; q0->q${Largo+1}[label="E"]`;
+    let direcQs = Qs_aux[0]+'->'+Trans_aux[0]+`[label="${Alf_aux[0]}"]`;
+    let double = '';
+    let point = `poi->q0`+' [color=dodgerblue,style=dotted] ;';
+    let poi=`poi[shape=point]`;
+    let fin;
+
+    for(let z=0;z<Finale_aux.length;z++){
+        if(Finale_aux[z]==true){
+            double+=`${Qfinale_aux[z]} [shape=doublecircle];`;
+        }
+    }
+    console.log(double);
+
+    for(let b =1; b < Qs_aux.length; b++){
+        direcQs+=Qs_aux[b]+'->'+Trans_aux[b]+`[label="${Alf_aux[b]}"]`+';';
+    }
+    fin = 'https://quickchart.io/graphviz?graph=digraph{'+poi+point+double+direUniQ+direcQs+'}';
+    Largo = 0;
     return fin;
 }
 
@@ -796,9 +827,36 @@ const estadosCompatibles = (compatibles1,Finale1) => {
             aux = [];
         }   
     console.log(compatibles1);
+}*/
+
+const estadosCompatibles = (compi,ff) => {
+    let aux = [];
+    let Finale1 = ff;
+    let compatibles1 = compi; 
+
+    //Rellena con 1 los incompatibles
+    for(let i = 0; i<Finale1.length; i++){
+        for(let j = 0; j<Finale1.length; j++){
+                if(i > j){
+                    if(Finale1[i] == true && Finale1[j] == false || Finale1[i] == false && Finale1[j] == true ){
+                        aux.push(1);
+                    }
+                    else
+                        aux.push(0);
+                }
+            } 
+            compatibles1[i] = aux;
+            aux = [];
+        }   
+    console.log(compatibles1);
 }
 
-const estadosDistinguibles = (compatibles1,Finale1,Trans1,numAlf1) => {
+const estadosDistinguibles = (com,Fi,Tra,niu) => {
+    let compatibles1 = com;
+    let Finale1 = Fi;
+    let Trans1 = Tra;
+    let numAlf1 = niu;
+
     let a=0;
          for(let i=0; i<Finale1.length;i++){  // for para viajar a traves de la matriz "compatibles"
              for(let j=0; j<Finale1.length;j++){
@@ -836,9 +894,70 @@ const estadosDistinguibles = (compatibles1,Finale1,Trans1,numAlf1) => {
      console.log(compatibles1);  
 }
 
-const simplificadoAFD = (compatibles1,Finale1,Qs1,Trans1,Alf1,numAlf1,Inicio,Qfinal) => {
-    let automataSimplificado = new automata;
+const estadosColapsados = (compp,qqs,Finn,Trass,nuuum) =>{
+    let compatibles1 = compp;
+    let Qs1 = qqs;
+    let Finale1 = Finn;
+    let Trans1 = Trass;
+    let numAlf1 = nuuum;
+    
+    let colapso = [];
+    for(let i=0;i<Qs1.length;i++){
+        if(Finale1[Number.parseInt(Trans1[i].charAt(1))]==true){
+            colapso[i]=0;
+        }
+        else{
+            colapso[i]=1;
+        }
+    }
+    let colapso2 = [];
+    let cont=0;
+    let conta=0;
+    console.log(Finale1.length);
+    for(let i=0;i<Finale1.length;i++){
+        for(let j=0;j<Finale1.length;j++){
+            if(i<j){
+                for(let a=0;a<numAlf1;a++){
+                    if(colapso2[i]==null){
+                        if(colapso[(i*numAlf1)+a]==colapso[(j*numAlf1)+a]){
+                            if(conta==numAlf1-1){      
+                                colapso2[i]=cont;
+                                colapso2[j]=cont;
+                                cont++;
+                                conta=0;
+                            }
+                            conta++;
+                        }
+                    }                 
+                } 
+                conta=0;
+            }
+        }
+        if(colapso2[i]==null){
+            colapso2[i]=cont;
+            cont++;
+        }
+    }
 
+    for(let i=0;i<Finale1.length;i++){
+        for(let j=0;j<Finale1.length;j++){
+            if(compatibles1[i][j]==0){
+                for(let a=0;a<numAlf1;a++){
+                    if(colapso2[Number.parseInt(Trans1[(i*numAlf1)+a].charAt(1))] != colapso2[Number.parseInt(Trans1[(j*numAlf1)+a].charAt(1))]){
+                        compatibles1[i][j]=1;
+                    }
+                }
+            }
+        }
+    }
+
+    console.log(compatibles1);
+    console.log(colapso);
+    console.log(colapso2);
+}
+
+const simplificadoAFD = (compatibles1,Finale1,Qs1,Trans1,Alf1,numAlf1,Inicio,Qfinal) => {
+    let automataSimpi = new automata;
     let aux_compatibles = compatibles1;
     let auxFinale = Finale1;
     let auxQs = Qs1;
@@ -905,9 +1024,9 @@ const simplificadoAFD = (compatibles1,Finale1,Qs1,Trans1,Alf1,numAlf1,Inicio,Qfi
 
     for(let i=0;i<Qs1.length;i++){
         if(auxQs[i]!=null){
-            automataSimplificado.k[cont]=auxQs[i];
-            automataSimplificado.s[cont]=auxAlf[i];
-            automataSimplificado.g[cont]=auxTrans[i];
+            automataSimpi.k[cont]=auxQs[i];
+            automataSimpi.s[cont]=auxAlf[i];
+            automataSimpi.g[cont]=auxTrans[i];
             cont++;
         }
     }
@@ -915,19 +1034,20 @@ const simplificadoAFD = (compatibles1,Finale1,Qs1,Trans1,Alf1,numAlf1,Inicio,Qfi
     cont=0;
     for(let i=0;i<Finale1.length;i++){
         if(auxFinale[i]!=null){
-            automataSimplificado.f[cont]=auxFinale[i];
-            automataSimplificado.qf[cont]=auxQFinale[i];
+            automataSimpi.f[cont]=auxFinale[i];
+            automataSimpi.qf[cont]=auxQFinale[i];
             cont++;
         }
     }
-    automataSimplificado.i=Inicio;
-    console.log(automataSimplificado);
-    return(automataSimplificado);
+    automataSimpi.i=Inicio;
+    console.log(automataSimpi);
+    return(automataSimpi);
 }
 
 const simplificar = (comp,fin_aux,tran_aux,numAlf_aux,qq_aux,alf_aux,Inicio,Qfinal) => {
     estadosCompatibles(comp,fin_aux);
     estadosDistinguibles(comp,fin_aux,tran_aux,numAlf_aux);
+    estadosColapsados(comp,qq_aux,fin_aux,tran_aux,numAlf_aux);
     return simplificadoAFD(comp,fin_aux,qq_aux,tran_aux,alf_aux,numAlf_aux,Inicio,Qfinal);
 }
 
@@ -946,21 +1066,178 @@ const complemento = (automata_aux) => {
     return compFinale;
 }
 
-const union = () => {
-    let newQ = [];
-    let largo = automata1.f.length;
-
-    for(let dv=1; dv<=largo*cantAlf; dv++){
-        newQ.push(`q${dv%cantAlf}`);
-    }
-    console.log(newQ);
-
-    /*for(let dvp=0; dvp<largo*cantAlf; dvp++){
-        newQ.push(`q${dvp+largo}`);
-    }
-    console.log(newQ);*/
+const nuevoAutomata = (nue1,nue2) => {
+    
 }
 
+const union = (auxU1,auxU2) => {
+    let newQ = [];
+    let newTrans = [];
+    let newRec = [];
+    let newFinale = [];
+    let newQFinale = [];
+    let newInicio = 0;
+
+    let largo = auxU1.qf.length;
+    let largo2 = auxU2.qf.length;
+
+    let nivel_final = 0;
+
+    for(let klh =0; klh<auxU1.k.length; klh++){
+        newQ.push(`q${Number.parseInt(auxU1.k[klh].charAt(1))+1}`);
+        if(klh==auxU1.k.length-1){
+            nivel_final = Number.parseInt(auxU1.k[klh].charAt(1))+1;
+            console.log(nivel_final);
+        }
+    }
+    for(let klp =0; klp<auxU2.k.length; klp++){
+        newQ.push(`q${Number.parseInt(auxU2.k[klp].charAt(1))+(nivel_final+1)}`);
+    }
+
+    for(let dvm=0; dvm<auxU1.s.length; dvm++){
+        newTrans.push(auxU1.s[dvm]);
+    }
+    for(let dvi=0; dvi<auxU2.s.length; dvi++){
+        newTrans.push(auxU2.s[dvi]);
+    }
+
+    for(let dvo=0; dvo<auxU1.g.length; dvo++){
+        newRec.push(`q${Number.parseInt(auxU1.g[dvo].charAt(1))+1}`);
+    }
+    for(let dvj=0; dvj<auxU2.g.length; dvj++){
+        newRec.push(`q${Number.parseInt(auxU2.g[dvj].charAt(1))+(nivel_final+1)}`);
+    }
+
+    for(let dva=0; dva<largo; dva++){
+        newFinale.push(auxU1.f[dva]);
+    }
+    for(let dvn=0; dvn<largo2; dvn++){
+        newFinale.push(auxU2.f[dvn]);
+    }
+
+    for(let dvg=0; dvg<newQ.length; dvg=dvg+2){
+        newQFinale.push(newQ[dvg]);
+    }
+
+    let inicialE1 = Number.parseInt(auxU1.i)+1;
+    let inicialE2 = Number.parseInt(auxU2.i)+nivel_final+1;
+
+    newQ.push('q0');
+    newQ.push('q0');
+
+    newTrans.push('E');
+    newTrans.push('E');
+
+    newRec.push(`q${inicialE1}`);
+    newRec.push(`q${inicialE2}`);
+
+    newQFinale.push('q0');
+    newFinale.push(false);
+
+    console.log(newQ);
+    console.log(newTrans);
+    console.log(newRec);
+    console.log(newFinale);
+    console.log(newQFinale);
+    console.log(`Estado Inicial: q${newInicio}`);
+
+    automataUnion.k = newQ;
+    automataUnion.s = newTrans;
+    automataUnion.g = newRec;
+    automataUnion.f = newFinale;
+    automataUnion.qf = newQFinale;
+    automataUnion.i = newInicio;
+    Largo = largo;
+}
+
+const concatenacion = (aux1,aux2) => {
+    let newiQ = [];
+    let newiTrans = [];
+    let newiRec = [];
+    let newiFinale = [];
+    let newiQFinale = [];
+    let newiInicio = aux1.i;
+
+    let largoi = aux1.qf.length;
+    let largoi2 = aux2.qf.length;
+
+    let nivel_final = 0;
+
+    for(let klh =0; klh<aux1.k.length; klh++){
+        newiQ.push(`q${Number.parseInt(aux1.k[klh].charAt(1))}`);
+        if(klh==aux1.k.length-1){
+            nivel_final = Number.parseInt(aux1.k[klh].charAt(1));
+            console.log(nivel_final);
+        }
+    }
+    for(let klp =0; klp<aux2.k.length; klp++){
+        newiQ.push(`q${Number.parseInt(aux2.k[klp].charAt(1))+(nivel_final+1)}`);
+    }
+
+    for(let dvm=0; dvm<aux1.s.length; dvm++){
+        newiTrans.push(aux1.s[dvm]);
+    }
+    for(let dvi=0; dvi<aux2.s.length; dvi++){
+        newiTrans.push(aux2.s[dvi]);
+    }
+
+    for(let dvo=0; dvo<aux1.g.length; dvo++){
+        newiRec.push(`q${Number.parseInt(aux1.g[dvo].charAt(1))}`);
+    }
+    for(let dvj=0; dvj<aux2.g.length; dvj++){
+        newiRec.push(`q${Number.parseInt(aux2.g[dvj].charAt(1))+(nivel_final+1)}`);
+    }
+
+    for(let dva=0; dva<largoi; dva++){
+        newiFinale.push(aux1.f[dva]);
+    }
+    for(let dvn=0; dvn<largoi2; dvn++){
+        newiFinale.push(aux2.f[dvn]);
+    }
+
+    for(let dvg=0; dvg<newiQ.length; dvg=dvg+2){
+        newiQFinale.push(newiQ[dvg]);
+    }
+
+    console.log(newiQ);
+    console.log(newiTrans);
+    console.log(newiRec);
+    console.log(newiFinale);
+    console.log(newiQFinale);
+    console.log(`Estado Inicial: q${newiInicio}`);
+
+    let inicial2 = Number.parseInt(aux2.i)+largoi+1;
+
+    for(let afg=0;afg<largoi;afg++){
+        if(aux1.f[afg]==true){
+            newiQ.push(newiQFinale[afg]);
+            newiTrans.push('E');
+            newiRec.push(`q${inicial2}`);
+        }
+    }
+
+    for(let hjk=0;hjk<largoi;hjk++){
+        if(newiFinale[hjk]==true){
+            newiFinale[hjk]=false;
+        }
+    }
+
+    console.log('------------------------------');
+    console.log(newiQ);
+    console.log(newiTrans);
+    console.log(newiRec);
+    console.log(newiFinale);
+    console.log(newiQFinale);
+    console.log(`Estado Inicial: q${newiInicio}`);
+
+    automataConca.k = newiQ;
+    automataConca.s = newiTrans;
+    automataConca.g = newiRec;
+    automataConca.f = newiFinale;
+    automataConca.qf = newiQFinale;
+    automataConca.i = newiInicio;
+    Largo = largoi;
+}
 
 //Eventos
 btn0.addEventListener('click', (evt) => {
@@ -1045,8 +1322,12 @@ btn8.addEventListener('click', (evt) => {
     imgAuAfdAu2.setAttribute('src',`${crearAu(automata2.k,automata2.g,automata2.s,automata2.qf,automata2.f,automata2.i)}`);
     imgAuEquiAu2.setAttribute('src',`${crearAu(automata2.k,automata2.g,automata2.s,automata2.qf,automata2.f,automata2.i)}`);
     automataSimplificado2 = simplificar(compatibles,automata2.f,automata2.g,numAlf,automata2.k,automata2.s,automata2.i,automata2.qf);
+    union(automataSimplificado1,automataSimplificado2);
+    concatenacion(automataSimplificado1,automataSimplificado2);
     imgAuSimpAu2.setAttribute('src',`${crearAu(automataSimplificado2.k,automataSimplificado2.g,automataSimplificado2.s,automataSimplificado2.qf,automataSimplificado2.f,automataSimplificado2.i)}`);
     imgAuComAu2.setAttribute('src',`${crearAu(automataSimplificado2.k,automataSimplificado2.g,automataSimplificado2.s,automataSimplificado2.qf,complemento(automataSimplificado2.f),automataSimplificado2.i)}`);
+    imgAuUnion.setAttribute('src',`${crearAu(automataUnion.k,automataUnion.g,automataUnion.s,automataUnion.qf,automataUnion.f,automataUnion.i)}`);
+    imgAuConca.setAttribute('src',`${crearAu(automataConca.k,automataConca.g,automataConca.s,automataConca.qf,automataConca.f,automataConca.i)}`)
 })
 
 //Afnd 2
@@ -1076,4 +1357,3 @@ btn11.addEventListener('click', (evt) => {
     guardarRadAfndAu2();
     imgAuAfdAu2.setAttribute('src',`${crearAu(automataAfnd2.k,automataAfnd2.g,automataAfnd2.s,automataAfnd2.qf,automataAfnd2.f,automataAfnd2.i)}`);
 })
-console.log('hola');
