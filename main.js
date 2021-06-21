@@ -82,6 +82,7 @@ const imgAuConca = document.querySelector(".Au-Concatenacion");
 
 //Variables Globales
 let abc = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","u","v","w","x","y","z"];
+let Eabc = ["E","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","u","v","w","x","y","z"];
 let numTransAfnd = [];
 let numTransAfndAu2 = [];
 let compatibles = [];
@@ -351,12 +352,30 @@ const imprimirInputsAlfAfndTrans = () => {
 
     for(let zx=0;zx<valorInputAlfAfnd;zx++){
         for(let hj=0;hj<numTransAfnd[zx];hj++){
-            const inputNewAlfAfnd = document.createElement('input');
+            const inputNewAlfAfnd = document.createElement('select');
             divInputAlfAfnd.append(inputNewAlfAfnd);
-            inputNewAlfAfnd.setAttribute('type','text');
             inputNewAlfAfnd.setAttribute('name',`Alf_Afnd_Tr${zx}-${hj}`);
             inputNewAlfAfnd.setAttribute('id',`Alf_Afnd_Tr${zx}-${hj}`);
-        }   
+            inputNewAlfAfnd.setAttribute('class',`Alf_Afnd_Tr${zx}-${hj}`);
+            document.getElementById(`Alf_Afnd_Tr${zx}-${hj}`).style.marginBottom = '5px';
+        }  
+    }
+    agregarOptionAlfAfndTrans(); 
+}
+
+const agregarOptionAlfAfndTrans = () => {
+    const valorOptiAfnd = txtNumInputi[0].value;
+
+    for(let ry=0;ry<valorOptiAfnd;ry++){
+        for(let yh=0;yh<numTransAfnd[ry];yh++){
+            let $selectiAfnd = document.querySelector(`.Alf_Afnd_Tr${ry}-${yh}`);
+            for(let km=0;km<=numAlf;km++){
+                const optiAfnd = document.createElement('option');
+                optiAfnd.value=`${Eabc[km]}`;
+                optiAfnd.text=`${Eabc[km]}`;
+                $selectiAfnd.append(optiAfnd);
+            }
+        }
     }
 }
 
@@ -656,12 +675,30 @@ const imprimirInputsAlfAfndTransAu2 = () => {
 
     for(let zxo=0;zxo<valorInputAlfAfndAu2;zxo++){
         for(let hjo=0;hjo<numTransAfndAu2[zxo];hjo++){
-            const inputNewAlfAfndAu2 = document.createElement('input');
+            const inputNewAlfAfndAu2 = document.createElement('select');
             divInputAlfAfndAu2.append(inputNewAlfAfndAu2);
-            inputNewAlfAfndAu2.setAttribute('type','text');
-            inputNewAlfAfndAu2.setAttribute('name',`Alf_Afnd_Tr${zxo}-${hjo}-Au2`);
+            divInputAlfAfndAu2.setAttribute('name',`Alf_Afnd_Tr${zxo}-${hjo}-Au2`);
             inputNewAlfAfndAu2.setAttribute('id',`Alf_Afnd_Tr${zxo}-${hjo}-Au2`);
-        }   
+            inputNewAlfAfndAu2.setAttribute('class',`Alf_Afnd_Tr${zxo}-${hjo}-Au2`);
+            document.getElementById(`Alf_Afnd_Tr${zxo}-${hjo}-Au2`).style.marginBottom = '5px';
+        }  
+    }
+    agregarOptionAlfAfndTransAu2(); 
+}
+
+const agregarOptionAlfAfndTransAu2 = () => {
+    const valorOptiAfnd = txtNumInputi2[0].value;
+
+    for(let ryo=0;ryo<valorOptiAfnd;ryo++){
+        for(let yho=0;yho<numTransAfndAu2[ryo];yho++){
+            let $selectiAfndAu2 = document.querySelector(`.Alf_Afnd_Tr${ryo}-${yho}-Au2`);
+            for(let kmo=0;kmo<=numAlf;kmo++){
+                const optiAfndAu2 = document.createElement('option');
+                optiAfndAu2.value=`${Eabc[kmo]}`;
+                optiAfndAu2.text=`${Eabc[kmo]}`;
+                $selectiAfndAu2.append(optiAfndAu2);
+            }
+        }
     }
 }
 
