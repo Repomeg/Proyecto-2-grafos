@@ -81,10 +81,12 @@ const imgAuUnion = document.querySelector(".Au-Union");
 const imgAuConca = document.querySelector(".Au-Concatenacion");
 
 //Variables Globales
-let abc = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","u","v","w","x","y","z"];
+let abc = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+let Eabc = ["E","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 let numTransAfnd = [];
 let numTransAfndAu2 = [];
 let compatibles = [];
+let numAlf;
 let Largo;
 
 //Arrays Automata
@@ -197,7 +199,7 @@ const guardarAlf = () => {
     for(let r=0;r<vAlf*numAlf;r++){
         let alfi = `${abc[r%numAlf]}`;
         automata1.s.push(alfi);
-    }automata1.s
+    }//automata1.s
     console.log(automata1.s);
 }
 
@@ -351,12 +353,30 @@ const imprimirInputsAlfAfndTrans = () => {
 
     for(let zx=0;zx<valorInputAlfAfnd;zx++){
         for(let hj=0;hj<numTransAfnd[zx];hj++){
-            const inputNewAlfAfnd = document.createElement('input');
+            const inputNewAlfAfnd = document.createElement('select');
             divInputAlfAfnd.append(inputNewAlfAfnd);
-            inputNewAlfAfnd.setAttribute('type','text');
             inputNewAlfAfnd.setAttribute('name',`Alf_Afnd_Tr${zx}-${hj}`);
             inputNewAlfAfnd.setAttribute('id',`Alf_Afnd_Tr${zx}-${hj}`);
-        }   
+            inputNewAlfAfnd.setAttribute('class',`Alf_Afnd_Tr${zx}-${hj}`);
+            document.getElementById(`Alf_Afnd_Tr${zx}-${hj}`).style.marginBottom = '5px';
+        }  
+    }
+    agregarOptionAlfAfndTrans(); 
+}
+
+const agregarOptionAlfAfndTrans = () => {
+    const valorOptiAfnd = txtNumInputi[0].value;
+
+    for(let ry=0;ry<valorOptiAfnd;ry++){
+        for(let yh=0;yh<numTransAfnd[ry];yh++){
+            let $selectiAfnd = document.querySelector(`.Alf_Afnd_Tr${ry}-${yh}`);
+            for(let km=0;km<=numAlf;km++){
+                const optiAfnd = document.createElement('option');
+                optiAfnd.value=`${Eabc[km]}`;
+                optiAfnd.text=`${Eabc[km]}`;
+                $selectiAfnd.append(optiAfnd);
+            }
+        }
     }
 }
 
@@ -656,12 +676,30 @@ const imprimirInputsAlfAfndTransAu2 = () => {
 
     for(let zxo=0;zxo<valorInputAlfAfndAu2;zxo++){
         for(let hjo=0;hjo<numTransAfndAu2[zxo];hjo++){
-            const inputNewAlfAfndAu2 = document.createElement('input');
+            const inputNewAlfAfndAu2 = document.createElement('select');
             divInputAlfAfndAu2.append(inputNewAlfAfndAu2);
-            inputNewAlfAfndAu2.setAttribute('type','text');
-            inputNewAlfAfndAu2.setAttribute('name',`Alf_Afnd_Tr${zxo}-${hjo}-Au2`);
+            divInputAlfAfndAu2.setAttribute('name',`Alf_Afnd_Tr${zxo}-${hjo}-Au2`);
             inputNewAlfAfndAu2.setAttribute('id',`Alf_Afnd_Tr${zxo}-${hjo}-Au2`);
-        }   
+            inputNewAlfAfndAu2.setAttribute('class',`Alf_Afnd_Tr${zxo}-${hjo}-Au2`);
+            document.getElementById(`Alf_Afnd_Tr${zxo}-${hjo}-Au2`).style.marginBottom = '5px';
+        }  
+    }
+    agregarOptionAlfAfndTransAu2(); 
+}
+
+const agregarOptionAlfAfndTransAu2 = () => {
+    const valorOptiAfnd = txtNumInputi2[0].value;
+
+    for(let ryo=0;ryo<valorOptiAfnd;ryo++){
+        for(let yho=0;yho<numTransAfndAu2[ryo];yho++){
+            let $selectiAfndAu2 = document.querySelector(`.Alf_Afnd_Tr${ryo}-${yho}-Au2`);
+            for(let kmo=0;kmo<=numAlf;kmo++){
+                const optiAfndAu2 = document.createElement('option');
+                optiAfndAu2.value=`${Eabc[kmo]}`;
+                optiAfndAu2.text=`${Eabc[kmo]}`;
+                $selectiAfndAu2.append(optiAfndAu2);
+            }
+        }
     }
 }
 
@@ -956,7 +994,7 @@ const estadosColapsados = (compp,qqs,Finn,Trass,nuuum) =>{
     console.log(colapso2);
 }
 
-const simplificadoAFD = (compatibles1,Finale1,Qs1,Trans1,Alf1,numAlf1,Inicio,Qfinal) => {
+const simplificadoAFD = (compatibles1,Finale1,Qs1,Trans1,Alf1,numAlf1,Inicio1,Qfinal) => {
     let automataSimpi = new automata;
     let aux_compatibles = compatibles1;
     let auxFinale = Finale1;
@@ -968,7 +1006,7 @@ const simplificadoAFD = (compatibles1,Finale1,Qs1,Trans1,Alf1,numAlf1,Inicio,Qfi
     for(let i=0;i<auxFinale.length;i++){
         for(let j=0;j<auxFinale.length;j++){
             if(aux_compatibles[i][j]==0){
-                if(i==Inicio){
+                if(i==Inicio1){
                     for(let x=0;x<auxQs.length;x++){
                         if(numAlf1<10){
                             if(Number.parseInt(auxTrans[x].charAt(1))==j){
@@ -1039,16 +1077,16 @@ const simplificadoAFD = (compatibles1,Finale1,Qs1,Trans1,Alf1,numAlf1,Inicio,Qfi
             cont++;
         }
     }
-    automataSimpi.i=Inicio;
+    automataSimpi.i=Inicio1;
     console.log(automataSimpi);
     return(automataSimpi);
 }
 
-const simplificar = (comp,fin_aux,tran_aux,numAlf_aux,qq_aux,alf_aux,Inicio,Qfinal) => {
+const simplificar = (comp,fin_aux,tran_aux,numAlf_aux,qq_aux,alf_aux,Inicio2,Qfinal) => {
     estadosCompatibles(comp,fin_aux);
     estadosDistinguibles(comp,fin_aux,tran_aux,numAlf_aux);
     estadosColapsados(comp,qq_aux,fin_aux,tran_aux,numAlf_aux);
-    return simplificadoAFD(comp,fin_aux,qq_aux,tran_aux,alf_aux,numAlf_aux,Inicio,Qfinal);
+    return simplificadoAFD(comp,fin_aux,qq_aux,tran_aux,alf_aux,numAlf_aux,Inicio2,Qfinal);
 }
 
 const complemento = (automata_aux) => {
@@ -1240,16 +1278,50 @@ const concatenacion = (aux1,aux2) => {
 }
 
 //Inicialización de Plogs
+//const concatenacion = (aux1,aux2) => {
 var storage = new plog.storages.LocalStorage({maxSize: 2000})
 
 plog.useStorage(storage);
 
-function verplogs(){
+const verplogs = () =>{
     console.log(storage.getEvents());
 }
-function limpiar(){
+const limpiar = () =>{
     storage.clear();
   }
+//función para descargar archivo
+const DescargarLogs = () =>{
+    var aux = "";
+    var events = storage.getEvents();
+    for (var i = 0; i < events.length - 1; i++) {
+      aux = aux + JSON.stringify(events[i]) + "\n";
+    }
+  
+    var element = document.createElement("a");
+    element.setAttribute(
+      "href",
+      "data:events/plain;charset=utf-8," + encodeURIComponent(aux)
+    );
+    element.setAttribute("download", "log.txt");
+    console.log(element);
+    element.style.display = "none";
+    document.body.appendChild(element);
+  
+    element.click();
+  
+    document.body.removeChild(element);
+  }
+  
+  document.getElementById("download").addEventListener(
+    "click",
+    function() {
+      // Genera la descarga del .txt
+  
+      DescargarLogs();
+    },
+    false
+  );
+
 
 //Eventos
 btn0.addEventListener('click', (evt) => {
@@ -1270,7 +1342,7 @@ btn1.addEventListener('click', (evt) => {
     document.getElementById("finales").innerHTML = 'Seleccione sus estados finales';
     agregarCheck();
     //botón enviar afd
-     //SACAR COMENTARIO plog.info('Cantidad de conjuntos identificadores para automata 1(AFD): '+ txtNumInput[0].value);
+    //SACAR COMENTARIO plog.info('Cantidad de conjuntos identificadores para automata 1(AFD): '+ txtNumInput[0].value);
 });
 
 btn2.addEventListener('click', (evt) => {
@@ -1352,7 +1424,7 @@ btn8.addEventListener('click', (evt) => {
     imgAuSimpAu2.setAttribute('src',`${crearAu(automataSimplificado2.k,automataSimplificado2.g,automataSimplificado2.s,automataSimplificado2.qf,automataSimplificado2.f,automataSimplificado2.i)}`);
     imgAuComAu2.setAttribute('src',`${crearAu(automataSimplificado2.k,automataSimplificado2.g,automataSimplificado2.s,automataSimplificado2.qf,complemento(automataSimplificado2.f),automataSimplificado2.i)}`);
     imgAuUnion.setAttribute('src',`${crearAu(automataUnion.k,automataUnion.g,automataUnion.s,automataUnion.qf,automataUnion.f,automataUnion.i)}`);
-    imgAuConca.setAttribute('src',`${crearAu(automataConca.k,automataConca.g,automataConca.s,automataConca.qf,automataConca.f,automataConca.i)}`)
+    imgAuConca.setAttribute('src',`${crearAu(automataConca.k,automataConca.g,automataConca.s,automataConca.qf,automataConca.f,automataConca.i)}`);
 })
 
 //Afnd 2
