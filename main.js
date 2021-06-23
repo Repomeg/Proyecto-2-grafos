@@ -13,20 +13,25 @@ const btn0 = document.querySelector(".btn0");
 //Automata 1
 const btn1 = document.querySelector(".btn1");
 const btn2 = document.querySelector(".btn2");
+btn2.style.display="none";
 const btn4 = document.querySelector(".btn4");
 const btn5 = document.querySelector(".btn5");
 const btn6 = document.querySelector(".btn6");
+btn6.style.display="none";
 
 //Automata 2
 const btn7 = document.querySelector(".btn7");
 const btn8 = document.querySelector(".btn8");
+btn8.style.display="none";
 const btn9 = document.querySelector(".btn9");
 const btn10 = document.querySelector(".btn10");
 const btn11 = document.querySelector(".btn11");
-
+btn11.style.display="none";
 //Form.HTML
 const form1 = document.querySelector("fomr1");
 const form2 = document.querySelector("fomr2");
+//Funciones Conjuntas
+const btn12 = document.querySelector(".btn12");
 
 //Divs.HTML
 //Automata 1
@@ -44,6 +49,7 @@ const divInputAlfAfnd = document.querySelector(".input-Alf-Afnd");
 const divInputSelRecAfnd = document.querySelector(".select-Rec-Afnd");
 const divInputCheckAfnd = document.querySelector(".inputs-Check-Afnd");
 const divInputRadAfnd = document.querySelector(".inputs-Rad-Afnd");
+
 
 const botont5 = document.getElementById("boton5");
 
@@ -87,7 +93,11 @@ let numTransAfnd = [];
 let numTransAfndAu2 = [];
 let compatibles = [];
 let numAlf;
+let numAlf2;
 let Largo;
+
+
+
 
 //Arrays Automata
 let Qs = [];
@@ -275,6 +285,7 @@ const agregarRad = () => {
         inputNewRad.setAttribute('class','ini');
         inputNewRad.setAttribute('value',`${aa}`);
         inputNewRad.setAttribute('name','ini');
+        inputNewRad.setAttribute('checked','true');
         divInputRad.append(`q${aa}  `);
     }
 }
@@ -283,6 +294,7 @@ const guardarRad = () => {
     let inici =  document.querySelector('input[name=ini]:checked').value;
     automata1.i = inici;
     console.log('Estado Inicial: q'+automata1.i);
+
 }
 
 //Funciones Formulario AFND Au1
@@ -313,10 +325,32 @@ const imprimirInputNumQAfnd = () => {
 
 const guardarInputNumQAfnd = () => {
     const vInputAfnd = txtNumInputi[0].value;
-
-    for(let ss=0;ss<vInputAfnd;ss++){
-        let vQAfnd = document.getElementById(`qnumAfnd${ss}`).value;
-        numTransAfnd.push(vQAfnd);
+    var x= document.getElementById("alfabeto").value;
+    var y= document.getElementById("num1i").value;
+    let esigual=x*y;
+        
+    for (let ss = 0; ss < vInputAfnd; ss++) {
+        //let vQAfnd = document.getElementById(`qnumAfnd${ss}`).value;
+        if(document.getElementById(`qnumAfnd${ss}`).value==""){
+            alert("Debe agregar un valor entre 1 y "+ esigual);
+            plog.error('Se agrego un valor invalido en las Transacciones AFND del Automata 1');
+            numTransAfnd=[];
+            return 0;
+        }
+        if(document.getElementById(`qnumAfnd${ss}`).value<1){
+            alert("Debe agregar un valor entre 1 y "+ esigual);
+            plog.error('Se agrego un valor invalido en las Transacciones AFND del Automata 1');
+            numTransAfnd=[];
+            return 0;
+            
+        }
+        if(document.getElementById(`qnumAfnd${ss}`).value>esigual){
+            alert("Debe agregar un valor entre 1 y "+ esigual);
+            plog.error('Se agrego un valor invalido en las Transacciones AFND del Automata 1');
+            numTransAfnd=[];
+            return 0;
+        }
+        numTransAfnd.push(document.getElementById(`qnumAfnd${ss}`).value);
     }
     console.log(numTransAfnd);
 }
@@ -470,6 +504,7 @@ const agregarRadAfnd = () => {
         inputNewRadAfnd.setAttribute('class','inic');
         inputNewRadAfnd.setAttribute('value',`${rv}`);
         inputNewRadAfnd.setAttribute('name','inic');
+        inputNewRadAfnd.setAttribute('checked','true');
         divInputRadAfnd.append(`q${rv}  `);
     }
 }
@@ -598,6 +633,7 @@ const agregarRadAu2 = () => {
         inputNewRadAu2.setAttribute('class','ini-Au2');
         inputNewRadAu2.setAttribute('value',`${aaw}`);
         inputNewRadAu2.setAttribute('name','ini-Au2');
+        inputNewRadAu2.setAttribute('checked','true');
         divInputRadAu2.append(`q${aaw}  `);
     }
 }
@@ -636,10 +672,33 @@ const imprimirInputNumQAfndAu2 = () => {
 
 const guardarInputNumQAfndAu2 = () => {
     const vInputAfndAu2 = txtNumInputi2[0].value;
-
-    for(let ssm=0;ssm<vInputAfndAu2;ssm++){
-        let vQAfndAu2 = document.getElementById(`qnumAfnd${ssm}-Au2`).value;
-        numTransAfndAu2.push(vQAfndAu2);
+    
+    var x= document.getElementById("alfabeto").value;
+    var y= document.getElementById("num1i-au2").value;
+    let esigual=x*y;
+    for (let ssm = 0; ssm < vInputAfndAu2; ssm++) {
+        //let vQAfndAu2 = document.getElementById(`qnumAfnd${ssm}-Au2`).value;
+        if(document.getElementById(`qnumAfnd${ssm}-Au2`).value==""){
+            alert("Debe agregar un valor entre 1 y "+ esigual);
+            plog.error('Se agrego un valor invalido en las Transacciones AFND del Automata 2');
+            numTransAfndAu2=[];
+            return 0;
+        }
+        
+        if(document.getElementById(`qnumAfnd${ssm}-Au2`).value<1){
+            alert("Debe agregar un valor entre 1 y "+ esigual);
+            plog.error('Se agrego un valor invalido en las Transacciones AFND del Automata 2');
+            numTransAfndAu2=[];
+            return 0;
+            
+        }
+        if(document.getElementById(`qnumAfnd${ssm}-Au2`).value>esigual){
+            alert("Debe agregar un valor entre 1 y "+ esigual);
+            plog.error('Se agrego un valor invalido en las Transacciones AFND del Automata 2');
+            numTransAfndAu2=[];
+            return 0;
+        }
+        numTransAfndAu2.push(document.getElementById(`qnumAfnd${ssm}-Au2`).value);
     }
     console.log(numTransAfndAu2);
 }
@@ -793,6 +852,7 @@ const agregarRadAfndAu2 = () => {
         inputNewRadAfndAu2.setAttribute('class','inic-Au2');
         inputNewRadAfndAu2.setAttribute('value',`${rvb}`);
         inputNewRadAfndAu2.setAttribute('name','inic-Au2');
+        inputNewRadAfndAu2.setAttribute('checked','true');
         divInputRadAfndAu2.append(`q${rvb}  `);
     }
 }
@@ -1244,7 +1304,7 @@ const concatenacion = (aux1,aux2) => {
     console.log(newiQFinale);
     console.log(`Estado Inicial: q${newiInicio}`);
 
-    let inicial2 = Number.parseInt(aux2.i)+largoi+1;
+    let inicial2 = Number.parseInt(aux2.i)+largoi;
 
     for(let afg=0;afg<largoi;afg++){
         if(aux1.f[afg]==true){
@@ -1294,29 +1354,19 @@ const DescargarLogs = () =>{
     var aux = "";
     var events = storage.getEvents();
     for (var i = 0; i < events.length - 1; i++) {
-      aux = aux + JSON.stringify(events[i]) + "\n";
+        aux = aux + JSON.stringify(events[i]) + "\n";
     }
-  
     var element = document.createElement("a");
-    element.setAttribute(
-      "href",
-      "data:events/plain;charset=utf-8," + encodeURIComponent(aux)
-    );
+    element.setAttribute("href","data:events/plain;charset=utf-8," + encodeURIComponent(aux));
     element.setAttribute("download", "log.txt");
-    console.log(element);
     element.style.display = "none";
     document.body.appendChild(element);
-  
     element.click();
-  
     document.body.removeChild(element);
-  }
-  
+}
   document.getElementById("download").addEventListener(
     "click",
     function() {
-      // Genera la descarga del .txt
-  
       DescargarLogs();
     },
     false
@@ -1325,14 +1375,48 @@ const DescargarLogs = () =>{
 
 //Eventos
 btn0.addEventListener('click', (evt) => {
+    
     numAlf = document.getElementById("alfabeto").value;
+    if(numAlf==""){
+        alert("Debe agregar un valor entre 1 y 26 primero");
+        plog.error('Se agrego un valor invalido en el alfabeto.');
+        return 0;
+    }
+    if(numAlf<0){
+        alert("Debe agregar un valor entre 1 y 26");
+        plog.error('Se agrego un valor invalido en el alfabeto.');
+        return 0;
+    }
+    if(numAlf>26){
+        alert("Debe agregar un valor entre 1 y 26");
+        plog.error('Se agrego un valor invalido en el alfabeto.');
+        return 0;
+    }
     console.log(numAlf);
     //SACAR COMENTARIO plog.info('Alfabeto creado con un tamaño: '+ numAlf);
-    
+
 });
 
 // Automata 1
 btn1.addEventListener('click', (evt) => {
+    btn2.style.display="block";    
+    numAlf = document.getElementById("alfabeto").value;
+    if(numAlf==""){
+        alert("Primero debe agregar el alfabeto.");
+        plog.error('El alfabeto no ha sido inicializado.');
+        return 0;
+    }
+    numAlf2 = document.getElementById("num1").value;
+    if(numAlf2<0){
+        alert("Debe agregar un valor entre 1 y 10");
+        plog.error('Se agrego un valor invalido para los identificadores AFD del Automata 1.');
+        return 0;
+    }
+    if(numAlf2>10){
+        alert("Debe agregar un valor entre 1 y 10");
+        plog.error('Se agrego un valor invalido para los identificadores AFD del Automata 1.');
+        return 0;
+    }
     document.getElementById("indique").innerHTML = '<h3> Indique las transacciones </h3>'
     imprimirInputsQ();
     imprimirInputsAlf();
@@ -1346,6 +1430,23 @@ btn1.addEventListener('click', (evt) => {
 });
 
 btn2.addEventListener('click', (evt) => {
+    numAlf = document.getElementById("alfabeto").value;
+    if(numAlf==""){
+        alert("Primero debe agregar un valor entre 1 y 26 en el alfabeto");
+        plog.error('El alfabeto no ha sido inicializado.');
+        return 0;
+    }
+    if(numAlf<0){
+        alert("Debe agregar un valor entre 1 y 26");
+        plog.error('Se agrego un valor invalido en el Alfabeto.');
+        return 0;
+    }
+    if(numAlf>26){
+        alert("Debe agregar un valor entre 1 y 26");
+        plog.error('Se agrego un valor invalido en el Alfabeto.');
+        return 0;
+    }
+    document.getElementById("tipo").disabled=true;   
     guardarQs();
     guardarAlf();
     guardarSelec();
@@ -1353,27 +1454,51 @@ btn2.addEventListener('click', (evt) => {
     guardarRad();
     //SACAR COMENTARIO plog.info('Se creo automata1 (AFD) con los valores: ');
     //SACAR COMENTARIO plog.info(automata1);
-    imgAuAfd.setAttribute('src',`${crearAu(automata1.k,automata1.g,automata1.s,automata1.qf,automata1.f,automata1.i)}`);
-    imgAuEqui.setAttribute('src',`${crearAu(automata1.k,automata1.g,automata1.s,automata1.qf,automata1.f,automata1.i)}`);
-    automataSimplificado1 = simplificar(compatibles,automata1.f,automata1.g,numAlf,automata1.k,automata1.s,automata1.i,automata1.qf);
-    imgAuSimp.setAttribute('src',`${crearAu(automataSimplificado1.k,automataSimplificado1.g,automataSimplificado1.s,automataSimplificado1.qf,automataSimplificado1.f,automataSimplificado1.i)}`);
-    imgAuCom.setAttribute('src',`${crearAu(automataSimplificado1.k,automataSimplificado1.g,automataSimplificado1.s,automataSimplificado1.qf,complemento(automataSimplificado1.f),automataSimplificado1.i)}`);
+    imgAuAfd.setAttribute('src', `${crearAu(automata1.k,automata1.g,automata1.s,automata1.qf,automata1.f,automata1.i)}`);
+    imgAuEqui.setAttribute('src', `${crearAu(automata1.k,automata1.g,automata1.s,automata1.qf,automata1.f,automata1.i)}`);
+    automataSimplificado1 = simplificar(compatibles, automata1.f, automata1.g, numAlf, automata1.k, automata1.s, automata1.i, automata1.qf);
+    imgAuSimp.setAttribute('src', `${crearAu(automataSimplificado1.k,automataSimplificado1.g,automataSimplificado1.s,automataSimplificado1.qf,automataSimplificado1.f,automataSimplificado1.i)}`);
+    imgAuCom.setAttribute('src', `${crearAu(automataSimplificado1.k,automataSimplificado1.g,automataSimplificado1.s,automataSimplificado1.qf,complemento(automataSimplificado1.f),automataSimplificado1.i)}`);
+
 });
 
 //Afnd 1
 btn4.addEventListener('click', (evt) => {
+    numAlf = document.getElementById("alfabeto").value;
+    if(numAlf==""){
+        alert("Primero debe agregar el alfabeto.");
+        plog.error('El alfabeto no ha sido inicializado.');
+        return 0;
+    }
+    numAlf2 = document.getElementById("num1i").value;
+    if(numAlf2<2){
+        alert("Debe agregar un valor entre 2 y 10");
+        plog.error('Se agrego un valor invalido para los identificadores AFND del Automata 1.');
+        return 0;
+    }
+    if(numAlf2>10){
+        alert("Debe agregar un valor entre 2 y 10");
+        plog.error('Se agrego un valor invalido para los identificadores AFND del Automata 1.');
+        return 0;
+    }
     imprimirInputsQAfnd();
     imprimirInputNumQAfnd();
     botont5.style.display = 'block'
     //botón enviar afnd   
     //SACAR COMENTARIO plog.info('Cantidad de conjuntos identificadores para automata 1(AFND): '+ txtNumInputi[0].value);
-    
+
 })
 
 btn5.addEventListener('click', (evt) => {
+    btn6.style.display="block";
     //SACAR COMENTARIO plog.info('Cantidad de transiciones por estado para el automata 1(AFND): ');
     document.getElementById("titulo-transAfnd").innerHTML = 'Indique las Transacciones'
-    guardarInputNumQAfnd();
+    
+    if( guardarInputNumQAfnd()==0){
+        return 0;
+    }else{
+        
+   
     //SACAR COMENTARIO plog.info(numTransAfnd);
     imprimirInputsQAfndTrans();
     imprimirInputsAlfAfndTrans();
@@ -1382,9 +1507,24 @@ btn5.addEventListener('click', (evt) => {
     agregarRadAfnd();
     document.getElementById("finales-Afnd").innerHTML = 'Seleccione sus estados finales';
     agregarCheckAfnd();
+}
 })
-
+let convi = [];
 btn6.addEventListener('click', (evt) => {
+     numAlf = document.getElementById("alfabeto").value;
+    if(numAlf==""){
+        alert("Debe agregar un valor entre 1 y 26 primero");
+        return 0;
+    }
+    if(numAlf<0){
+        alert("Debe agregar un valor entre 1 y 26");
+        return 0;
+    }
+    if(numAlf>26){
+        alert("Debe agregar un valor entre 1 y 26");
+        return 0;
+    }
+    document.getElementById("tipo").disabled=true;
     guardarInputsQAfndTrans();
     guardarInputsAlfAfndTrans();
     guardarSelectRecAfnd();
@@ -1392,11 +1532,30 @@ btn6.addEventListener('click', (evt) => {
     guardarRadAfnd();
     //SACAR COMENTARIO plog.info('Se creo automata1 (AFND) con los valores: ');
     //SACAR COMENTARIO plog.info(automataAfnd1);
-    imgAuAfd.setAttribute('src',`${crearAu(automataAfnd1.k,automataAfnd1.g,automataAfnd1.s,automataAfnd1.qf,automataAfnd1.f,automataAfnd1.i)}`);
+    imgAuAfd.setAttribute('src', `${crearAu(automataAfnd1.k,automataAfnd1.g,automataAfnd1.s,automataAfnd1.qf,automataAfnd1.f,automataAfnd1.i)}`);
 })
 
 //Automata 2
 btn7.addEventListener('click', (evt) => {
+    btn8.style.display="block";
+    numAlf = document.getElementById("alfabeto").value;
+    if(numAlf==""){
+        alert("Primero debe agregar el alfabeto.");
+        plog.error('El alfabeto no ha sido inicializado.');
+        return 0;
+    }
+    numAlf2 = document.getElementById("num1-au2").value;
+    if(numAl2<2){
+        alert("Debe agregar un valor entre 2 y 10");
+        plog.error('Se agrego un valor invalido para los identificadores AFD del Automata 2.');
+        return 0;
+    }
+    if(numAlf2>10){
+        alert("Debe agregar un valor entre 2 y 10");
+        plog.error('Se agrego un valor invalido para los identificadores AFD del Automata 2.');
+        return 0;
+    }
+    document.getElementById("tipo-au2").disabled=true;
     document.getElementById("indique-au2").innerHTML = '<h3> Indique las transacciones </h3>'
     imprimirInputsQAu2();
     imprimirInputsAlfAu2();
@@ -1405,10 +1564,26 @@ btn7.addEventListener('click', (evt) => {
     agregarRadAu2();
     document.getElementById("finales-au2").innerHTML = 'Seleccione sus estados finales';
     agregarCheckAu2();
-     //SACAR COMENTARIO plog.info('Cantidad de conjuntos identificadores para automata 2(AFD): '+ txtNumInput2[0].value);
+    //SACAR COMENTARIO plog.info('Cantidad de conjuntos identificadores para automata 2(AFD): '+ txtNumInput2[0].value);
 })
 
 btn8.addEventListener('click', (evt) => {
+    numAlf = document.getElementById("alfabeto").value;
+    if(numAlf==""){
+        alert("Primero debe agregar un valor entre 1 y 26 en el alfabeto");
+        plog.error('El alfabeto no ha sido inicializado.');
+        return 0;
+    }
+    if(numAlf<0){
+        alert("Debe agregar un valor entre 1 y 26");
+        plog.error('Se agrego un valor invalido en el Alfabeto.');
+        return 0;
+    }
+    if(numAlf>26){
+        alert("Debe agregar un valor entre 1 y 26");
+        plog.error('Se agrego un valor invalido en el Alfabeto.');
+        return 0;
+    }
     guardarQsAu2();
     guardarAlfAu2();
     guardarSelecAu2();
@@ -1416,40 +1591,77 @@ btn8.addEventListener('click', (evt) => {
     guardarCheckAu2();
     //SACAR COMENTARIO plog.info('Se creo automata2 (AFD) con los valores: ');
     //SACAR COMENTARIO plog.info(automata2);
-    imgAuAfdAu2.setAttribute('src',`${crearAu(automata2.k,automata2.g,automata2.s,automata2.qf,automata2.f,automata2.i)}`);
-    imgAuEquiAu2.setAttribute('src',`${crearAu(automata2.k,automata2.g,automata2.s,automata2.qf,automata2.f,automata2.i)}`);
-    automataSimplificado2 = simplificar(compatibles,automata2.f,automata2.g,numAlf,automata2.k,automata2.s,automata2.i,automata2.qf);
-    union(automataSimplificado1,automataSimplificado2);
-    concatenacion(automataSimplificado1,automataSimplificado2);
-    imgAuSimpAu2.setAttribute('src',`${crearAu(automataSimplificado2.k,automataSimplificado2.g,automataSimplificado2.s,automataSimplificado2.qf,automataSimplificado2.f,automataSimplificado2.i)}`);
-    imgAuComAu2.setAttribute('src',`${crearAu(automataSimplificado2.k,automataSimplificado2.g,automataSimplificado2.s,automataSimplificado2.qf,complemento(automataSimplificado2.f),automataSimplificado2.i)}`);
-    imgAuUnion.setAttribute('src',`${crearAu(automataUnion.k,automataUnion.g,automataUnion.s,automataUnion.qf,automataUnion.f,automataUnion.i)}`);
-    imgAuConca.setAttribute('src',`${crearAu(automataConca.k,automataConca.g,automataConca.s,automataConca.qf,automataConca.f,automataConca.i)}`);
+    imgAuAfdAu2.setAttribute('src', `${crearAu(automata2.k,automata2.g,automata2.s,automata2.qf,automata2.f,automata2.i)}`);
+    imgAuEquiAu2.setAttribute('src', `${crearAu(automata2.k,automata2.g,automata2.s,automata2.qf,automata2.f,automata2.i)}`);
+    automataSimplificado2 = simplificar(compatibles, automata2.f, automata2.g, numAlf, automata2.k, automata2.s, automata2.i, automata2.qf);
+    union(automataSimplificado1, automataSimplificado2);
+    concatenacion(automataSimplificado1, automataSimplificado2);
+    imgAuSimpAu2.setAttribute('src', `${crearAu(automataSimplificado2.k,automataSimplificado2.g,automataSimplificado2.s,automataSimplificado2.qf,automataSimplificado2.f,automataSimplificado2.i)}`);
+    imgAuComAu2.setAttribute('src', `${crearAu(automataSimplificado2.k,automataSimplificado2.g,automataSimplificado2.s,automataSimplificado2.qf,complemento(automataSimplificado2.f),automataSimplificado2.i)}`);
+    imgAuUnion.setAttribute('src', `${crearAu(automataUnion.k,automataUnion.g,automataUnion.s,automataUnion.qf,automataUnion.f,automataUnion.i)}`);
+    imgAuConca.setAttribute('src', `${crearAu(automataConca.k,automataConca.g,automataConca.s,automataConca.qf,automataConca.f,automataConca.i)}`);
 })
 
 //Afnd 2
 btn9.addEventListener('click', (evt) => {
+    numAlf = document.getElementById("alfabeto").value;
+    if(numAlf==""){
+        alert("Primero debe agregar el abecedario.");
+        plog.error('El alfabeto no ha sido inicializado.');
+        return 0;
+    }
+    numAlf2 = document.getElementById("num1i-au2").value;
+    if(numAlf2<2){
+        alert("Debe agregar un valor entre 2 y 10");
+        plog.error('Se agrego un valor invalido para los identificadores AFND del Automata 2.');
+        return 0;
+    }
+    if(numAlf2>10){
+        alert("Debe agregar un valor entre 2 y 10");
+        plog.error('Se agrego un valor invalido para los identificadores AFND del Automata 2.');
+        return 0;
+    }
     imprimirInputsQAfndAu2();
     imprimirInputNumQAfndAu2();
     botont5Au2.style.display = 'block'
-     //SACAR COMENTARIO plog.info('Cantidad de conjuntos identificadores para automata 2(AFND): '+ txtNumInputi2[0].value);
+    //SACAR COMENTARIO plog.info('Cantidad de conjuntos identificadores para automata 2(AFND): '+ txtNumInputi2[0].value);
 })
 
 btn10.addEventListener('click', (evt) => {
     //SACAR COMENTARIO plog.info('Cantidad de transiciones por estado para el automata 2(AFND): ');
+    btn11.style.display="block";
     document.getElementById("titulo-transAfnd-au2").innerHTML = 'Indique las Transacciones'
-    guardarInputNumQAfndAu2();
+     
+    if(guardarInputNumQAfndAu2()==0){
+        return 0;
+    }
+    else{
+    document.getElementById("tipo-au2").disabled=true;
     //SACAR COMENTARIO plog.info(numTransAfndAu2)
-    imprimirInputsQAfndTransAu2(); 
+    imprimirInputsQAfndTransAu2();
     imprimirInputsAlfAfndTransAu2();
     imprimirSelectRecAfndAu2();
     document.getElementById("inicial-Afnd-au2").innerHTML = 'Seleccione su estado inicial';
     agregarRadAfndAu2();
     document.getElementById("finales-Afnd-au2").innerHTML = 'Seleccione sus estados finales';
     agregarCheckAfndAu2();
+}
 })
 
 btn11.addEventListener('click', (evt) => {
+    numAlf = document.getElementById("alfabeto").value;
+    if(numAlf==""){
+        alert("Debe agregar un valor entre 1 y 26 primero");
+        return 0;
+    }
+    if(numAlf<0){
+        alert("Debe agregar un valor entre 1 y 26");
+        return 0;
+    }
+    if(numAlf>26){
+        alert("Debe agregar un valor entre 1 y 26");
+        return 0;
+    }
     guardarInputsQAfndTransAu2();
     guardarInputsAlfAfndTransAu2();
     guardarSelectRecAfndAu2();
@@ -1457,6 +1669,32 @@ btn11.addEventListener('click', (evt) => {
     guardarRadAfndAu2();
     //SACAR COMENTARIO plog.info('Se creo automata1 (AFND) con los valores: ');
     //SACAR COMENTARIO plog.info(automataAfnd2);
-    imgAuAfdAu2.setAttribute('src',`${crearAu(automataAfnd2.k,automataAfnd2.g,automataAfnd2.s,automataAfnd2.qf,automataAfnd2.f,automataAfnd2.i)}`);
+    imgAuAfdAu2.setAttribute('src', `${crearAu(automataAfnd2.k,automataAfnd2.g,automataAfnd2.s,automataAfnd2.qf,automataAfnd2.f,automataAfnd2.i)}`);
 })
 
+btn12.addEventListener('click', (evt) => {
+     let contador = 0;
+     if(automata1.k.length>0){
+         contador++;
+     }
+     if(automataAfnd1.k.length>0){
+        contador++;
+    } 
+    if(automata2.k.length>0){
+        contador++;
+    } 
+    if(automataAfnd2.k.length>0){
+        contador++;
+    } 
+    console.log(contador);
+    if(contador == 2){
+        alert("wena perrito tudo bem");
+       
+    } 
+    else{
+        alert("Para utilizar este botón, primero debe crear dos automatas"); 
+        plog.error("No se han creado los 2 automatas necesarios.");
+        return 0;
+    }
+
+})

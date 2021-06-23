@@ -15,7 +15,7 @@
     <nav class="navbar navbar-expand-sm navbar-dark bg-light border-info">
         <div class="container d-flex justify-content-around">
             <div>
-                <a href="#">
+                <a href="https://www.utem.cl">
                     <img src="img/utem.png" alt="">
                 </a>
             </div>
@@ -30,33 +30,85 @@
         </div>
     </nav>
     <br><br>
+    
     <div class="container border border-info bg-light">
+        <div>¿Necesitas ayuda?, presiona este botón para una guía de como usar la página --->
+        <!-- Button trigger modal -->
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalLong">
+    Guía de uso
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div>
+            Primero, la sección "alfabeto" debe escribir la longitud del alfabeto a usar en los automatas, es decir, si ingresa "3", el alfabeto será a,b,c; si ingresa 6, el alfabeto será a,b,c,d,e,f.
+            </div>
+            Ejemplo:
+                  <img src="img/ejemplo-alfabeto1.png" alt="">  
+            <br><br>
+            <div>
+            Luego debe seleccionar su tipo de automata, pinchando una de las opciones como se muestra en la foto   
+            </div>        
+                  <img src="img/ejemplo-selección-automata.png" alt=""> 
+            <br><br>
+            <div>
+            CASO 1 (AFD)    
+            </div>
+            <br><br>      
+            <div>      
+            Si su selección fue AFD, el siguiente paso es ingresar la cantidad de conjuntos identificadores y luego presionar el botón "enviar" como indica la foto;  Esto va a generar las transacciones     
+            </div>
+                  <img src="img/cantidad-identificadores-AFD1.png" alt="">   
+            <br><br>
+            <div>
+            Una vez ya generadas las transacciones, en las cajas de la derecha debe elegir la dirección a la que lleva cada transacción; una vez terminado este paso, debe seleccionar su estado final y sus estados fnales.
+            </div>      
+                  <img src="img/transacciones-afd1.png" alt="">
+            <br><br>
+            <div>
+            Finalmente presione el botón enviar formulario y su automata será impreso en la sección inferior.    
+            </div>
+            <br><br>
+            <div>
+                CASO 2 (AFND)    
+                </div>
+                <br><br>   
+            <div>
+            Si su selección fue AFND el siguiente paso es ingresar la cantidad de transacciones que tendrá cada estado, esto lo hace escribiendo la cantidad en cada una de las casillas como indica la foto, luego presione el botón "enviar"  
+            </div>  
+                  <img src="img/cantidad-transacciones-afnd.png" alt="">    
+            <br><br>
+            <div>
+            El siguiente paso es indicar las transacciones de cada "Q", esto se hace seleccionando el camino y la dirección en las casillas correspondientes (en caso de querer ingresar un epsilon (ε) seleccione la "E"). Luego debe seleccionar su estado inicial y sus estados finales 
+            </div>      
+                <img src="img/transacciones-afnd.png" alt="">
+            <br><br>
+            <div>
+            Finalmente presione el botón enviar formulario y su automata será impreso en la sección inferior.      
+            </div>    
+        </div>
+        <div class="modal-footer">
+            Haga click afuera de la ventana o presione "cerrar" para salir.
+          <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- fin de Modal -->
+</div>
         <h2>Ingrese la longitud de su alfabeto</h2>
         <input type="number" id="alfabeto">
         <button type="button" class="btn0">Enviar</button>
-         <!-- Modal -->
-        <button type="button" class="btn0" data-toggle="modal" data-target="#exampleModal" >
-            ayuda?
-          </button>
-          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Ayuda</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  TEXTO DE PRUEBA
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- cierre modal-->
         <br><br>
         
     </div>
@@ -70,30 +122,7 @@
                 <select name="tipo" id="tipo" onclick="mostrarFormulario()">
                     <option value="AFD">AFD</option>
                     <option value="AFND">AFND</option>
-                </select>
-                <!-- Modal -->
-        <button type="button" class="btn0" data-toggle="modal" data-target="#exampleModal" >
-            ayuda?
-          </button>
-          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Ayuda</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  TEXTO DE PRUEBA
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- cierre modal-->
+                </select>               
             </div>
 
         <div class="wrapper" id="wrapper">
@@ -161,30 +190,7 @@
                 <select name="tipo-au2" id="tipo-au2" onclick="mostrarFormularioAu2()">
                     <option value="AFD">AFD</option>
                     <option value="AFND">AFND</option>
-                </select>
-                <!-- Modal -->
-        <button type="button" class="btn0" data-toggle="modal" data-target="#exampleModal" >
-            ayuda?
-          </button>
-          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Ayuda</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  TEXTO DE PRUEBA
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- cierre modal-->
+                </select>             
             </div>
 
                 <div class="wrapper-au2" id="wrapper-au2">
@@ -245,6 +251,9 @@
                 </div>
             </div>
         </div>
+    </div>    
+    <div class="container d-flex justify-content-center ">
+        <button type="button" id="btn12" class="btn12">Funciones conjuntas</button>
     </div>
     <br>
     <div class="container border border-info bg-light">
@@ -306,17 +315,21 @@
     
         <div class="d-flex justify-content-center">
             <h2>Union de sus automatas</h2>
-            <img class="Au-Union" alt="">
         </div>
+        <div class="d-flex justify-content-center">
+            <img class="Au-Union" alt="">
+            </div>
     
         <div class="d-flex justify-content-center">
             <h2>Concatenacion de sus automatas</h2>
-            <img class="Au-Concatenacion" alt="">
         </div>
+        <div class="d-flex justify-content-center">
+            <img class="Au-Concatenacion" alt="">
+            </div>
         </div>
     <!--Botón para revisar logs-->
     <button type="button" class="plogs" onclick="verplogs()">Revisar logs</button>
-    <button type="button" id="download" ">Descargar logs</button>
+    <button type="button" id="download" >Descargar logs</button>
     <script src="main.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
